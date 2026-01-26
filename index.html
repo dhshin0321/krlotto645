@@ -15,11 +15,11 @@
                 </span>
                 
                 <span class="title-round">
-                    <span id="currentRound"></span>회차 번호 생성기
+                    <span id="currentRound">1209</span>회차 번호 생성기
                 </span>
 
                 <span class="title-date">
-                    (<span id="currentDate"></span> 추첨 예정)
+                    (<span id="currentDate">2026-01-31</span> 추첨 예정)
                 </span>
             </h1>
 
@@ -28,7 +28,14 @@
                 <button id="immediate-generate" class="hidden">즉시 생성</button>
             </div>
 
-            <div id="result"></div>
+            <div id="result">
+                <div class="ball placeholder"></div>
+                <div class="ball placeholder"></div>
+                <div class="ball placeholder"></div>
+                <div class="ball placeholder"></div>
+                <div class="ball placeholder"></div>
+                <div class="ball placeholder"></div>
+            </div>
         </div>
 
         <div id="history-container">
@@ -46,7 +53,8 @@
         </ul>
 
         <h2 class="prize-title">🏆 당첨구조</h2>
-        <div class="table-scroll"> <table class="prize-table">
+        <div class="table-responsive">
+            <table class="prize-table">
                 <thead>
                     <tr>
                         <th>등위</th>
@@ -70,7 +78,7 @@
                     <tr>
                         <td>2등</td>
                         <td>
-                            5개 번호 일치 + 보너스 번호 일치
+                            5개 + 보너스 일치
                             <div class="match-dots">
                                 <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot bonus-plus">+</span><span class="dot bonus"></span>
                             </div>

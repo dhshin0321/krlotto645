@@ -5,87 +5,182 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 20px;
-    min-height: 100vh; /* [해결] 배경이 끊기지 않게 요술 도화지 설정 */
+    padding: 20px 10px;
+    min-height: 100vh;
     margin: 0;
-}
-
-/* 2. 전체를 감싸는 상자 (나란히 배치 고정) */
-.wrapper {
-    display: flex;
-    gap: 10px;           /* 사이 간격을 좁게 조정 */
-    align-items: flex-start;
-    width: 98%;          /* 화면을 꽉 차게 사용 */
-    max-width: 850px;    /* 최대 너비 설정 */
-    flex-wrap: nowrap;   /* [핵심] 절대 아래 줄로 내려가지 마! */
-    justify-content: center;
-    margin-top: 20px;
-}
-
-/* 3. 번호 생성기 컨테이너 (왼쪽) */
-.container {
-    background-color: white;
-    padding: 20px 10px;  /* 패딩을 줄여서 공간 확보 */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    flex: 1.5;           /* 기록실보다 조금 더 넓게 가짐 */
-    min-width: 0;        /* 찌그러짐 방지 */
     box-sizing: border-box;
 }
 
-h1 { color: #333; margin-bottom: 15px; line-height: 1.1; }
-h1 .title-lotto { font-family: "Pretendard Variable", sans-serif; font-size: clamp(24px, 8vw, 56px); font-weight: 800; letter-spacing: -1px; display: block; }
+.wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 790px;
+}
+
+/* 2. 번호 생성기 컨테이너 (왼쪽) */
+.container {
+    background-color: white;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+    min-height: 282px;
+    box-sizing: border-box;
+}
+
+h1 { color: #333; margin-bottom: 20px; line-height: 1.1; }
+h1 .title-lotto { font-family: "Pretendard Variable", sans-serif; font-size: clamp(40px, 8vw, 56px); font-weight: 800; letter-spacing: -1px; display: block; }
 h1 .lotto-normal-size { font-size: 1em; font-weight: inherit; }
 h1 .lotto-small-size { font-size: 0.6em; font-weight: 650; }
-h1 .title-round { display: block; margin-top: 10px; font-size: clamp(14px, 4vw, 24px); font-weight: bold; }
-h1 .title-date { font-size: clamp(10px, 3vw, 16px); color: #888; font-weight: normal; display: block; margin-top: 3px; }
+h1 .title-round { display: block; margin-top: 12px; font-size: clamp(18px, 4vw, 24px); font-weight: bold; }
+h1 .title-date { font-size: 14px; color: #888; font-weight: normal; display: block; margin-top: 3px; }
 
-/* 4. 버튼 및 공 스타일 */
-.button-group { display: flex; justify-content: center; gap: 5px; margin-bottom: 20px; }
-button { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px; font-size: clamp(12px, 3.5vw, 16px); cursor: pointer; transition: all 0.3s; }
-#result { margin-top: 20px; font-size: 24px; font-weight: bold; display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
-.ball { width: clamp(25px, 7vw, 40px); height: clamp(25px, 7vw, 40px); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: clamp(12px, 3.5vw, 19px); flex-shrink: 0; }
+/* 3. 버튼 스타일 */
+.button-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: all 0.3s; }
+button:hover { background-color: #45a049; }
+button:disabled { background-color: #ccc; cursor: not-allowed; }
+#immediate-generate { background-color: #f44336; }
+#immediate-generate:hover { background-color: #d32f2f; }
+.hidden { display: none; }
+
+/* 4. 결과 공(Ball) 스타일 */
+#result { margin-top: 30px; font-size: 24px; font-weight: bold; display: flex; justify-content: center; gap: 8px; min-height: 45px; flex-wrap: wrap; }
+.ball { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 18px; flex-shrink: 0; }
 .ball.placeholder { background-color: transparent; border: 2px solid #e0e0e0; color: transparent; }
 
-/* 5. 번호 기록 섹션 (오른쪽 고정) */
+/* 5. 번호 기록 섹션 (오른쪽) */
 #history-container { 
-    background-color: white; 
-    padding: 15px 10px; 
-    border-radius: 10px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    flex: 1;             /* 왼쪽보다 약간 좁게 */
-    min-width: 0;        /* 찌그러짐 방지 */
-    max-height: 400px;   /* 높이 고정 */
-    overflow-y: auto; 
-    box-sizing: border-box; 
-}
-#history-container h2 { text-align: center; margin-top: 0; margin-bottom: 15px; color: #333; font-size: clamp(16px, 4vw, 24px); }
-.history-item { display: flex; justify-content: flex-start; align-items: center; padding: 8px 2px; border-bottom: 1px solid #eee; }
-.history-number-prefix { font-weight: bold; margin-right: 8px; color: #555; flex-shrink: 0; font-size: clamp(10px, 3vw, 16px); }
-.history-numbers { display: flex; gap: 3px; }
-.history-ball { width: clamp(20px, 5.5vw, 30px); height: clamp(20px, 5.5vw, 30px); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: clamp(9px, 2.5vw, 13px); font-weight: bold; }
-
-/* 6. 설명 컨테이너 */
-#explanation-container { 
     background-color: white; 
     padding: 20px; 
     border-radius: 10px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    width: 98%; 
-    max-width: 850px; 
+    width: 300px; 
+    box-sizing: border-box; 
+    display: flex;
+    flex-direction: column;
+    max-height: 310px; 
+}
+
+#history-container h2 { 
+    text-align: center; 
+    margin-top: 0; 
+    margin-bottom: 15px; 
+    color: #333; 
+    font-size: 20px; 
+    flex-shrink: 0;
+}
+
+#history-list {
+    overflow-y: auto; 
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-right: 5px; 
+}
+
+/* 스크롤바 디자인 */
+#history-list::-webkit-scrollbar { width: 4px; }
+#history-list::-webkit-scrollbar-thumb { background-color: #ddd; border-radius: 10px; }
+
+.history-item { 
+    display: flex; 
+    justify-content: flex-start; 
+    align-items: center; 
+    padding: 8px 0; 
+    border-bottom: 1px solid #eee; 
+    font-size: 14px; 
+    flex-shrink: 0; 
+    height: 45px; 
+    box-sizing: border-box;
+}
+
+.history-number-prefix { font-weight: bold; margin-right: 10px; color: #555; flex-shrink: 0; width: 25px; }
+.history-numbers { display: flex; gap: 4px; }
+.history-ball { width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 12px; font-weight: bold; }
+
+/* 6. 설명 컨테이너 */
+#explanation-container { 
+    background-color: white; 
+    padding: 30px 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    width: 100%;
+    max-width: 790px; 
     box-sizing: border-box; 
     margin-top: 40px; 
     color: #555; 
     margin-bottom: 50px;
 }
 
-.guide-title { text-align: center; margin-bottom: 20px; color: #333; }
-.guide-list { text-align: left; padding-left: 20px; line-height: 1.6; list-style-position: outside; font-size: 14px; }
+.guide-title { text-align: center; margin-bottom: 20px; color: #333; font-size: 22px; }
+.guide-list { 
+    text-align: left; 
+    list-style-type: disc; 
+    padding-left: 20px; 
+    margin-bottom: 30px; 
+    line-height: 1.6;
+}
 .guide-list li { margin-bottom: 8px; }
 
-/* 테이블 모바일 보호 */
-.table-scroll { width: 100%; overflow-x: auto; margin-top: 10px; }
-.prize-table { width: 100%; border-collapse: collapse; min-width: 500px; font-size: 12px; }
-.prize-table th { background-color: #e94e6b; color: white; padding: 10px; border: 1px solid #ddd; }
-.prize-table td { padding: 8px; border: 1px solid #ddd; text-align: center; color: #333; }
+.prize-title { text-align: center; margin-top: 30px; margin-bottom: 20px; color: #333; font-size: 22px; }
+
+/* 표 가로스크롤 방지 및 비율 최적화 */
+.table-responsive { width: 100%; overflow-x: hidden; }
+.prize-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 14px; 
+    table-layout: fixed; 
+}
+.prize-table th { background-color: #e94e6b; color: white; padding: 10px 5px; border: 1px solid #ddd; }
+.prize-table td { padding: 10px 5px; border: 1px solid #ddd; text-align: center; color: #333; word-break: keep-all; }
+
+/* ★ 웹(기본) 당첨확률(4번째 칸) 오른쪽 정렬 */
+.prize-table td:nth-child(4) { 
+    text-align: right; 
+    padding-right: 10px; /* 오른쪽 벽에서 10px 띄움 */
+}
+
+/* 표 열 너비 고정 */
+.prize-table th:nth-child(1), .prize-table td:nth-child(1) { width: 12%; }
+.prize-table th:nth-child(2), .prize-table td:nth-child(2) { width: 33%; }
+.prize-table th:nth-child(3), .prize-table td:nth-child(3) { width: 35%; }
+.prize-table th:nth-child(4), .prize-table td:nth-child(4) { width: 20%; }
+
+.match-dots { display: flex; gap: 2px; margin-top: 5px; justify-content: center; } 
+.dot { width: 8px; height: 8px; border-radius: 50%; background-color: transparent; border: 1px solid #ddd; }
+.dot.active, .dot.bonus { background-color: #FB8EA1; border: 1px solid #FB8EA1; }
+.dot.bonus-plus { border: none; color: #666; font-size: 10px; width: auto; line-height: 8px; }
+
+/* 7. 모바일 반응형 설정 */
+@media (max-width: 768px) {
+    .wrapper {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .container {
+        width: 100%;
+        min-height: auto;
+    }
+    #history-container {
+        width: 100%;
+        margin-top: 10px;
+        max-height: 310px; 
+    }
+    .prize-table {
+        font-size: 10px;
+    }
+    .prize-table td {
+        padding: 8px 2px;
+    }
+    /* ★ 모바일 당첨확률(4번째 칸) 오른쪽 정렬 미세 조정 */
+    .prize-table td:nth-child(4) {
+        text-align: right;
+        padding-right: 2px; /* 모바일은 화면이 좁으니 여백을 5px로 줄임 */
+    }
+}
