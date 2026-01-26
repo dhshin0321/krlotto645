@@ -38,14 +38,84 @@
     </div>
 
     <div id="explanation-container">
-    <h2>🍀 로또 번호 생성기 이용 안내</h2>
-    <p>여기에 첫 번째 문단을 작성하세요. 로또 추첨 방식이나 확률 등에 대해 적으시면 좋습니다.</p>
-    <p>두 번째 문단입니다. 번호가 생성되는 원리나 기록실 활용법을 설명해 보세요.</p>
-    <p>주의사항: 본 생성기는 재미를 위한 용도이며, 당첨을 보장하지 않습니다.</p>
-</div>
+        <h2 class="guide-title">🍀 로또 번호 생성기 이용 안내</h2>
+        <ul class="guide-list">
+            <li>1부터 45까지의 숫자 중 중복 없이 6개의 번호를 무작위로 추출합니다.</li>
+            <li>매주 토요일 추첨되는 로또 6/45의 공식 규칙을 따르며, 생성된 번호는 우측 기록에 자동으로 저장됩니다.</li>
+            <li>행운을 나누는 마음으로 제작되었습니다. 가벼운 마음으로 번호를 확인해 보세요.</li>
+        </ul>
+
+        <h2 class="prize-title">🏆 당첨구조</h2>
+        <table class="prize-table">
+            <thead>
+                <tr>
+                    <th>등위</th>
+                    <th>당첨조건</th>
+                    <th>당첨금</th>
+                    <th>당첨확률</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1등</td>
+                    <td>
+                        6개 번호 일치
+                        <div class="match-dots">
+                            <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span>
+                        </div>
+                    </td>
+                    <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 75%</td>
+                    <td>1 / 8,145,060</td>
+                </tr>
+                <tr>
+                    <td>2등</td>
+                    <td>
+                        5개 번호 일치 + 보너스 번호 일치
+                        <div class="match-dots">
+                            <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot bonus-plus">+</span><span class="dot bonus"></span>
+                        </div>
+                    </td>
+                    <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 12.5%</td>
+                    <td>1 / 1,357,510</td>
+                </tr>
+                <tr>
+                    <td>3등</td>
+                    <td>
+                        5개 번호 일치
+                        <div class="match-dots">
+                            <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span>
+                        </div>
+                    </td>
+                    <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 12.5%</td>
+                    <td>1 / 35,724</td>
+                </tr>
+                <tr>
+                    <td>4등</td>
+                    <td>
+                        4개 번호 일치
+                        <div class="match-dots">
+                            <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+                        </div>
+                    </td>
+                    <td>50,000원</td>
+                    <td>1 / 733</td>
+                </tr>
+                <tr>
+                    <td>5등</td>
+                    <td>
+                        3개 번호 일치
+                        <div class="match-dots">
+                            <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                        </div>
+                    </td>
+                    <td>5,000원</td>
+                    <td>1 / 45</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <audio id="dingSound" src="ding.mp3" preload="auto"></audio>
-    
     <script src="script.js"></script>
 </body>
 </html>

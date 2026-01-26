@@ -3,212 +3,96 @@ body {
     font-family: 'Malgun Gothic', sans-serif;
     background-color: #f0f2f5;
     display: flex;
-    flex-direction: column; /* 추가: 자식 요소들을 세로로 정렬 */
-    align-items: center;    /* 가운데 정렬 유지 */
+    flex-direction: column;
+    align-items: center;
     padding-top: 50px;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
 }
 
-/* 메인 생성기 + 기록실을 가로로 배치 */
 .wrapper {
     display: flex;
     gap: 40px;
     align-items: flex-start;
-    width: 790px; /* 메인 컨테이너(450px) + 기록실(300px) + 간격(40px) */
+    width: 790px;
 }
 
 /* 2. 번호 생성기 컨테이너 (왼쪽) */
 .container {
     background-color: white;
-    padding: 30px;               /* 상자 테두리와 내용 사이의 안쪽 여백 */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 450px;                /* 내용 영역 가로 너비 */
-    height: 282px;               /* 전체 높이(342px)를 맞추기 위해 패딩을 제외한 높이 설정 */
-}
-
-/* 제목(h1) 영역 설정 */
-h1 {
-    color: #333;
-    margin-bottom: 20px;
-    line-height: 1.1;
-}
-
-/* 'Lotto 6/45' 로고 스타일 */
-h1 .title-lotto {
-    font-family: "Pretendard Variable", sans-serif;
-    font-size: 56px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    display: block;
-}
-
-h1 .lotto-normal-size {
-    font-size: 1em;         /* .title-lotto에서 정한 크기(56px)를 그대로 사용 */
-    font-weight: inherit;   /* .title-lotto에서 정한 굵기(800)를 그대로 물려받음 */
-}
-
-h1 .lotto-small-size {
-    font-size: 32px;
-    font-weight: 650;
-}
-
-/* 회차 제목 스타일 */
-h1 .title-round {
-    display: block;
-    margin-top: 12px;
-    font-size: 24px; 
-    font-weight: bold;
-}
-
-/* 추첨일 날짜 스타일 */
-h1 .title-date {
-    font-size: 16px;
-    color: #888;
-    font-weight: normal;
-    display: block;
-    margin-top: 3px;
-}
-
-/* 3. 버튼 스타일 */
-.button-group {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-/* 즉시 생성 버튼 (빨간색) */
-#immediate-generate {
-    background-color: #f44336;
-}
-
-#immediate-generate:hover {
-    background-color: #d32f2f;
-}
-
-.hidden {
-    display: none;
-}
-
-/* 4. 결과 공(Ball) 스타일 */
-#result {
-    margin-top: 30px;
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    min-height: 45px;
-}
-
-.ball {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 19px;
-    flex-shrink: 0;
-    transition: background-color 0.3s ease;
-    /* 배경색(background-color)은 JS에서 번호 대역별로 동적으로 할당됨 */
-}
-
-/* 번호 생성 전 빈 테두리 공 */
-.ball.placeholder {
-    background-color: transparent;
-    border: 2px solid #e0e0e0;
-    color: transparent;
-}
-
-/* 5. 번호 기록 섹션 (오른쪽) */
-#history-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    max-height: 342px; 
-    overflow-y: auto;
-    box-sizing: border-box; /* 안쪽 여백과 테두리를 포함하여 높이를 계산함 */
-}
-
-#history-container h2 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #333;
-}
-
-.history-item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 10px 3px;
-    border-bottom: 1px solid #eee;
-    font-size: 16px;
-}
-
-.history-number-prefix {
-    font-weight: bold;
-    margin-right: 15px;
-    color: #555;
-    flex-shrink: 0;
-}
-
-.history-numbers {
-    display: flex;
-    gap: 5px;
-}
-
-/* 기록실 전용 작은 공 스타일 */
-.history-ball {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-/* 6. 설명 컨테이너 (하단) */
-#explanation-container {
-    background-color: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 790px;               /* 전체 너비를 790으로 설정 */
-    box-sizing: border-box;     /* 패딩(30px)을 790 안으로 포함시킴 */
-    
-    margin-top: 200px;
-    line-height: 1.6;
-    color: #555;
+    width: 450px;
+    height: 282px;
 }
+
+h1 { color: #333; margin-bottom: 20px; line-height: 1.1; }
+h1 .title-lotto { font-family: "Pretendard Variable", sans-serif; font-size: 56px; font-weight: 800; letter-spacing: -1px; display: block; }
+h1 .lotto-normal-size { font-size: 1em; font-weight: inherit; }
+h1 .lotto-small-size { font-size: 32px; font-weight: 650; }
+h1 .title-round { display: block; margin-top: 12px; font-size: 24px; font-weight: bold; }
+h1 .title-date { font-size: 16px; color: #888; font-weight: normal; display: block; margin-top: 3px; }
+
+/* 3. 버튼 스타일 */
+.button-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+button { background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: all 0.3s; }
+button:hover { background-color: #45a049; }
+button:disabled { background-color: #ccc; cursor: not-allowed; }
+#immediate-generate { background-color: #f44336; }
+#immediate-generate:hover { background-color: #d32f2f; }
+.hidden { display: none; }
+
+/* 4. 결과 공(Ball) 스타일 */
+#result { margin-top: 30px; font-size: 24px; font-weight: bold; display: flex; justify-content: center; gap: 10px; min-height: 45px; }
+.ball { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 19px; flex-shrink: 0; transition: background-color 0.3s ease; }
+.ball.placeholder { background-color: transparent; border: 2px solid #e0e0e0; color: transparent; }
+
+/* 5. 번호 기록 섹션 (오른쪽) */
+#history-container { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 300px; max-height: 342px; overflow-y: auto; box-sizing: border-box; }
+#history-container h2 { text-align: center; margin-top: 0; margin-bottom: 15px; color: #333; }
+.history-item { display: flex; justify-content: flex-start; align-items: center; padding: 10px 3px; border-bottom: 1px solid #eee; font-size: 16px; }
+.history-number-prefix { font-weight: bold; margin-right: 15px; color: #555; flex-shrink: 0; }
+.history-numbers { display: flex; gap: 5px; }
+.history-ball { width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 13px; font-weight: bold; }
+
+/* 6. 설명 컨테이너 */
+#explanation-container { 
+    background-color: white; 
+    padding: 30px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    width: 790px; 
+    box-sizing: border-box; 
+    margin-top: 80px; 
+    color: #555; 
+    margin-bottom: 50px;
+}
+
+.guide-title { text-align: center; margin-bottom: 25px; color: #333; }
+.guide-list { 
+    text-align: left; 
+    list-style-type: disc; 
+    padding-left: 20px; 
+    margin-bottom: 40px; 
+    line-height: 1.8;
+    list-style-position: outside;
+}
+.guide-list li { margin-bottom: 8px; margin-left: 20px; }
+
+.prize-title { text-align: center; margin-top: 50px; margin-bottom: 20px; color: #333; }
+.prize-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+.prize-table th { background-color: #e94e6b; color: white; padding: 12px; border: 1px solid #ddd; text-align: center; }
+.prize-table td { padding: 12px; border: 1px solid #ddd; text-align: center; color: #333; }
+.prize-table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+
+.prize-table td:nth-child(2) { text-align: center; }
+.prize-table td:nth-child(3) { text-align: center; }
+.prize-table td:nth-child(4) { text-align: right; padding-right: 10px; }
+
+.match-dots { display: flex; gap: 4px; margin-top: 8px; align-items: center; justify-content: center; } 
+.dot { width: 10px; height: 10px; border-radius: 50%; background-color: transparent; border: 1px solid #ddd; display: inline-block; }
+.dot.active { background-color: #FB8EA1; border: 1px solid #FB8EA1; }
+.dot.bonus { background-color: #FB8EA1; border: 1px solid #FB8EA1; }
+.dot.bonus-plus { border: none; color: #666666; font-size: 13px; font-weight: bold; width: auto; line-height: 10px; }
