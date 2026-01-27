@@ -205,7 +205,7 @@ function initMap() {
 function initKakaoShare() {
     try {
         if (!Kakao.isInitialized()) {
-            Kakao.init('YOUR_KAKAO_JAVASCRIPT_KEY'); // HTML의 키와 동일한 키 사용
+            Kakao.init('e7792702246bec1c4bf599bf666f71aa'); // HTML의 키와 동일한 키 사용
         }
     } catch (e) {
         console.log('Kakao SDK init failed (Check API Key)');
