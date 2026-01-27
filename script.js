@@ -29,10 +29,7 @@ const MS_IN_A_WEEK = 7 * 24 * 60 * 60 * 1000; // 1주일의 밀리초
 const HISTORY_STORAGE_KEY = 'lotto_history_v1';
 const HISTORY_MAX = 30;
 
-// ================================
 // ★ 지도 팝업 "찐최종 기획안" 구현용 상태/상수 (추가)
-// ================================
-
 // ✅ 기본 위치: 광화문광장 (초기 로드 시 즉시 표시)
 const GWANGHWAMUN_LAT = 37.571648;  // 광화문광장 근처
 const GWANGHWAMUN_LNG = 126.976866;
@@ -47,8 +44,10 @@ const MAP_PERMISSION_BANNER_SHOWN_KEY = 'map_permission_banner_shown_v1';
 let map = null;                          // 카카오맵 인스턴스
 let placesService = null;                // 장소 검색 서비스
 let mapBaseReady = false;                // 초기 광화문 지도 표시 완료 여부
-let mapFirstClickHandled = false;         // "클릭 1" 처리 완료 여부 (권한요청 + 검색)
-let lastKnownLat = GWANGHWAMUN_LAT;       // 내 위치를 알면 내 위치, 모르면 광화문
+let mapFirstClickHandled = false;        // "클릭 1" 처리 시작 여부(권한요청 시작)
+let mapFirstClickCompleted = false;      // ★ 추가: "클릭 1" 성공/실패 콜백까지 끝났는지
+let mapFirstClickInProgress = false;     // ★ 추가: 위치 요청 진행 중인지(중복 호출 방지)
+let lastKnownLat = GWANGHWAMUN_LAT;      // 내 위치를 알면 내 위치, 모르면 광화문
 let lastKnownLng = GWANGHWAMUN_LNG;
 let lottoMarkers = [];                   // 생성된 로또 마커들
 let myLocationMarker = null;             // 내 위치 마커(허용 시)
@@ -162,10 +161,7 @@ function toggleExclude(num, btn) {
     document.getElementById('exclude-count').textContent = `${excludeSet.size}/38`;
 }
 
-// ================================
 // ★ 기능 2: 카카오맵 연동 (지도팝업 찐최종 기획안 반영 - 수정)
-// ================================
-
 // (추가) 지도 위 안내 배너 DOM 얻기
 function getMapPermissionBannerEl() {
     return document.getElementById('map-permission-banner'); // HTML에서 추가된 요소
@@ -263,14 +259,14 @@ function searchAndDisplayLottoMarkers(centerLat, centerLng) {
 }
 
 // (추가) 카카오맵 새 탭 열기 (클릭 2 이후)
-// ★ 수정 포인트: map.kakao.com의 q=로또,lat,lng 형태는 "로또,lat,lng"를 통째로 검색어로 취급해서 결과없음이 뜸
-// → 공식 URL Scheme 형태(m.map.kakao.com/scheme/search?q=키워드&p=lat,lng)로 열어야 "좌표 기준 검색"이 됨
+// ★ 핵심: q=로또,lat,lng 같은 형태는 "전체가 검색어"가 되어 결과 없음이 뜰 수 있음
+// → 좌표 기준 검색을 지원하는 scheme URL 사용
 function openKakaoMapSearchTab(lat, lng) {
     const q = encodeURIComponent('로또');
 
-    // 카카오 공식 URL Scheme (모바일웹 스킴) 형태: search?q=...&p=위도,경도
-    // 웹(PC)에서도 새 탭으로 열면 대체로 정상 동작
-    const url = `https://m.map.kakao.com/scheme/search?q=${q}&p=${lat},${lng}`;
+    // ★ 주의: 카카오 좌표는 보통 x=경도(lng), y=위도(lat)
+    // scheme의 p도 (lng,lat)로 넣는 편이 정상 동작 가능성이 높음
+    const url = `https://m.map.kakao.com/scheme/search?q=${q}&p=${lng},${lat}`;
 
     window.open(url, '_blank', 'noopener,noreferrer');
 }
@@ -325,10 +321,14 @@ function initMapBaseOnly() {
 function handleMapFirstClick() {
     if (!mapBaseReady || !mapKakaoAvailable) return;
 
-    // 이미 1회 처리(권한요청+검색) 했다면 여기서 처리하지 않음
-    if (mapFirstClickHandled) return;
+    // 이미 완료됐으면(성공/실패 콜백까지 끝) 재실행 안 함
+    if (mapFirstClickCompleted) return;
+
+    // 진행 중이면 중복 호출 방지
+    if (mapFirstClickInProgress) return;
 
     mapFirstClickHandled = true;
+    mapFirstClickInProgress = true;
 
     // 즉시 위치 권한 요청 (브라우저 기본 팝업만)
     if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
@@ -341,6 +341,10 @@ function handleMapFirstClick() {
         } catch (e) {}
 
         searchAndDisplayLottoMarkers(lastKnownLat, lastKnownLng);
+
+        // ★ 완료 처리
+        mapFirstClickInProgress = false;
+        mapFirstClickCompleted = true;
         return;
     }
 
@@ -365,6 +369,10 @@ function handleMapFirstClick() {
 
             // 주변 '로또' 키워드 검색 + 마커 표시
             searchAndDisplayLottoMarkers(lat, lng);
+
+            // ★ 완료 처리(여기서부터 클릭2가 "내 위치"를 확실히 씀)
+            mapFirstClickInProgress = false;
+            mapFirstClickCompleted = true;
         },
         function(error) {
             // ❌ 거부/실패 시: 광화문 유지 + 광화문 기준 검색
@@ -376,13 +384,15 @@ function handleMapFirstClick() {
             } catch (e) {}
 
             // "영구 차단" 상태 UX (PERMISSION_DENIED)
-            // - 팝업이 아예 뜨지 않는 상태는 브라우저별로 감지 완벽 불가
-            // - 다만 PERMISSION_DENIED면 안내 배너를 1회 노출(기획안 확정)
             if (error && error.code === 1) {
                 showPermissionBlockedBannerOnce();
             }
 
             searchAndDisplayLottoMarkers(lastKnownLat, lastKnownLng);
+
+            // ★ 완료 처리
+            mapFirstClickInProgress = false;
+            mapFirstClickCompleted = true;
         },
         {
             enableHighAccuracy: false,
@@ -421,10 +431,12 @@ function initMap() {
 
     mapBox.addEventListener('click', () => {
         // 클릭 1: 권한요청 + (허용/거부) 기준으로 검색/마커
-        if (!mapFirstClickHandled) {
+        // ★ 완료되기 전(콜백 전)에는 절대 클릭2로 넘어가지 않게 막음
+        if (!mapFirstClickHandled || !mapFirstClickCompleted) {
             handleMapFirstClick();
             return;
         }
+
         // 클릭 2 이후: 카카오맵 새 탭(로또 검색 결과)
         handleMapReClickOpenTab();
     });
@@ -640,9 +652,7 @@ window.addEventListener('load', () => {
         });
     }
 
-    // ================================
     // ★ 지도: "초기 로드 즉시 광화문 지도 표시" + 클릭 플로우는 initMap()에 위임 (수정)
-    // ================================
     // ✅ 초기 상태: 광화문 지도만 즉시 표시 (권한요청/검색/마커 없음)
     initMap(); // 내부에서 initMapBaseOnly() 실행 + 클릭 핸들러 바인딩
 });
