@@ -211,9 +211,36 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     width: 100%;
     box-sizing: border-box;
     text-align: center;
+
+    /* ★ 추가: 배너를 지도 위에 겹쳐 띄우기 위한 기준 */
+    position: relative;
 }
+
+/* ★ 추가: 위치 권한 영구 차단 안내 배너(지도 위, 최상단) */
+.map-permission-banner {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 10;
+
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1.35;
+    color: #333;
+}
+
 #map-container-box h2 { font-size: 18px; margin-top: 0; margin-bottom: 10px; color: #333; }
-#map { width: 100%; height: 250px; border-radius: 8px; background-color: #eee; }
+
+/* ★ 수정: 배너와 지도의 겹침이 자연스럽게 보이도록 overflow 처리 */
+#map { width: 100%; height: 250px; border-radius: 8px; background-color: #eee; overflow: hidden; }
+
 .map-info { font-size: 12px; color: #888; margin-top: 8px; margin-bottom: 0; text-align: left; }
 
 /* 5-2. 필터 스타일 */
@@ -348,5 +375,14 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     .filter-btn {
         width: 11%; /* 한 줄에 9개 정도 들어가도록 */
         height: 36px;
+    }
+
+    /* ★ 추가: 모바일에서 배너 여백/폰트 살짝 축소 */
+    .map-permission-banner {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        padding: 9px 10px;
+        font-size: 11px;
     }
 }

@@ -78,6 +78,14 @@
 
             <div id="map-container-box">
                 <h2>📍 주변 로또 판매점</h2>
+
+                <!-- ★ 추가: 위치 권한이 "영구 차단" 등으로 팝업이 안 뜨는 경우 안내 문구(지도 위, 최상단) -->
+                <!-- (JS에서 필요할 때만 표시/숨김 처리할 예정) -->
+                <div id="map-permission-banner" class="map-permission-banner" style="display:none;">
+                    위치 권한이 차단되어 있어요.<br>
+                    주소창 옆 🔒 아이콘에서 위치 허용으로 바꿀 수 있어요.
+                </div>
+
                 <div id="map"></div>
                 <p class="map-info">* 현재 위치 기준으로 가까운 로또 판매점을 표시합니다.</p>
             </div>

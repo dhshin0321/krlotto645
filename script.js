@@ -1,4 +1,4 @@
- // 1. 변수 및 상수 설정 (기본 세팅)
+// 1. 변수 및 상수 설정 (기본 세팅)
 const generateBtn = document.getElementById('generate');
 const immediateBtn = document.getElementById('immediate-generate');
 const resultDiv = document.getElementById('result');
@@ -19,7 +19,7 @@ const excludeSet = new Set();     // 제외할 번호 (최대 38개)
 
 // 회차 및 날짜 계산을 위한 기준 (2026년 기준)
 const BASE_ROUND = 1210;
-const BASE_DATE_FOR_1210 = new Date('2026-01-31T20:00:00+09:00'); 
+const BASE_DATE_FOR_1210 = new Date('2026-01-31T20:00:00+09:00');
 const MS_IN_A_WEEK = 7 * 24 * 60 * 60 * 1000; // 1주일의 밀리초
 
 // 카카오 API 키 (사용자가 직접 발급받은 JS 키를 HTML에 넣어야 함)
@@ -29,12 +29,38 @@ const MS_IN_A_WEEK = 7 * 24 * 60 * 60 * 1000; // 1주일의 밀리초
 const HISTORY_STORAGE_KEY = 'lotto_history_v1';
 const HISTORY_MAX = 30;
 
+// ================================
+// ★ 지도 팝업 "찐최종 기획안" 구현용 상태/상수 (추가)
+// ================================
+
+// ✅ 기본 위치: 광화문광장 (초기 로드 시 즉시 표시)
+const GWANGHWAMUN_LAT = 37.571648;  // 광화문광장 근처
+const GWANGHWAMUN_LNG = 126.976866;
+
+// ✅ 장소검색 반경(약 2km)
+const LOTTO_SEARCH_RADIUS = 2000;
+
+// ✅ "영구 차단" 안내 배너 1회 노출(localStorage)
+const MAP_PERMISSION_BANNER_SHOWN_KEY = 'map_permission_banner_shown_v1';
+
+// 지도 객체/상태
+let map = null;                          // 카카오맵 인스턴스
+let placesService = null;                // 장소 검색 서비스
+let mapBaseReady = false;                // 초기 광화문 지도 표시 완료 여부
+let mapFirstClickHandled = false;         // "클릭 1" 처리 완료 여부 (권한요청 + 검색)
+let lastKnownLat = GWANGHWAMUN_LAT;       // 내 위치를 알면 내 위치, 모르면 광화문
+let lastKnownLng = GWANGHWAMUN_LNG;
+let lottoMarkers = [];                   // 생성된 로또 마커들
+let myLocationMarker = null;             // 내 위치 마커(허용 시)
+let mapInfoWindow = null;                // 인포윈도우(마커 클릭 시 장소명)
+let mapKakaoAvailable = true;            // 카카오 SDK 사용 가능 여부
+
 // 2. 초기화 및 화면 업데이트 함수
 
 // 현재 회차와 추첨 날짜를 계산하고 화면(HTML)에 표시하는 함수
 function updateRoundNumber() {
     const currentRoundElement = document.getElementById('currentRound');
-    const currentDateElement = document.getElementById('currentDate'); 
+    const currentDateElement = document.getElementById('currentDate');
     if (!currentRoundElement || !currentDateElement) return;
 
     const now = new Date();
@@ -90,7 +116,7 @@ function initFilterButtons() {
         exBtn.dataset.num = i;
         exBtn.onclick = () => toggleExclude(i, exBtn);
         excludeContainer.appendChild(exBtn);
-        
+
         // 9개 단위로 줄바꿈을 시각적으로 돕기 위해 (CSS flex-wrap이 처리하지만, DOM 순서 보장)
     }
 }
@@ -136,69 +162,266 @@ function toggleExclude(num, btn) {
     document.getElementById('exclude-count').textContent = `${excludeSet.size}/38`;
 }
 
-// ★ 기능 2: 카카오맵 연동
-function initMap() {
-    const mapContainer = document.getElementById('map'); 
-    
+// ================================
+// ★ 기능 2: 카카오맵 연동 (지도팝업 찐최종 기획안 반영 - 수정)
+// ================================
+
+// (추가) 지도 위 안내 배너 DOM 얻기
+function getMapPermissionBannerEl() {
+    return document.getElementById('map-permission-banner'); // HTML에서 추가된 요소
+}
+
+// (추가) "영구 차단" 안내 배너 1회 노출
+function showPermissionBlockedBannerOnce() {
+    const banner = getMapPermissionBannerEl();
+    if (!banner) return;
+
+    // 이미 1회 보여줬다면 종료
+    const shown = localStorage.getItem(MAP_PERMISSION_BANNER_SHOWN_KEY);
+    if (shown === '1') return;
+
+    // 표시
+    banner.style.display = 'block';
+
+    // 1회 노출 처리
+    localStorage.setItem(MAP_PERMISSION_BANNER_SHOWN_KEY, '1');
+}
+
+// (추가) 배너 숨김(기본은 숨김 유지)
+function hidePermissionBanner() {
+    const banner = getMapPermissionBannerEl();
+    if (!banner) return;
+    banner.style.display = 'none';
+}
+
+// (추가) 마커 정리
+function clearLottoMarkers() {
+    if (lottoMarkers && lottoMarkers.length > 0) {
+        lottoMarkers.forEach(m => {
+            try { m.setMap(null); } catch (e) {}
+        });
+    }
+    lottoMarkers = [];
+}
+
+// (추가) 내 위치 마커 정리
+function clearMyLocationMarker() {
+    if (myLocationMarker) {
+        try { myLocationMarker.setMap(null); } catch (e) {}
+        myLocationMarker = null;
+    }
+}
+
+// (추가) 카카오 장소 검색 + 마커 표시 (반경 2km, 키워드 '로또')
+function searchAndDisplayLottoMarkers(centerLat, centerLng) {
+    if (!map || !placesService || !mapKakaoAvailable) return;
+
+    // 기존 마커/인포윈도우 정리
+    clearLottoMarkers();
+
+    if (!mapInfoWindow) {
+        mapInfoWindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+    } else {
+        try { mapInfoWindow.close(); } catch (e) {}
+    }
+
+    const locPosition = new kakao.maps.LatLng(centerLat, centerLng);
+
+    placesService.keywordSearch(
+        '로또',
+        (data, status, pagination) => {
+            if (status === kakao.maps.services.Status.OK) {
+                for (let i = 0; i < data.length; i++) {
+                    const place = data[i];
+
+                    const marker = new kakao.maps.Marker({
+                        map: map,
+                        position: new kakao.maps.LatLng(place.y, place.x)
+                    });
+
+                    lottoMarkers.push(marker);
+
+                    // 마커 클릭 시 장소명 표시
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                        const safeName = place.place_name || '';
+                        mapInfoWindow.setContent(
+                            '<div style="padding:6px 8px;font-size:12px;line-height:1.2;white-space:nowrap;">' +
+                            safeName +
+                            '</div>'
+                        );
+                        mapInfoWindow.open(map, marker);
+                    });
+                }
+            }
+            // 실패/0건이어도 "막힘" 느낌 주지 않기: 별도 alert/경고 없이 그냥 조용히 유지
+        },
+        {
+            location: locPosition,
+            radius: LOTTO_SEARCH_RADIUS
+        }
+    );
+}
+
+// (추가) 카카오맵 새 탭 열기 (클릭 2 이후)
+function openKakaoMapSearchTab(lat, lng) {
+    const query = encodeURIComponent('로또');
+    const url = `https://map.kakao.com/link/search/${query},${lat},${lng}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+// ✅ 초기 상태(페이지 최초 로드)
+// - 기본 위치: 광화문광장
+// - 지도는 즉시 표시
+// - 위치 권한 요청 없음
+// - '로또' 검색 없음
+// - 마커 없음
+function initMapBaseOnly() {
+    const mapContainer = document.getElementById('map');
+
     // 카카오맵 객체가 로드되지 않았으면(API키 없음 등) 중단하지 않고 안내 표시
     if (typeof kakao === 'undefined' || !kakao.maps) {
-        mapContainer.innerHTML = '<p style="padding-top:100px; color:#888;">지도를 불러올 수 없습니다.<br>(API Key 확인 필요)</p>';
+        mapKakaoAvailable = false;
+        if (mapContainer) {
+            mapContainer.innerHTML = '<p style="padding-top:100px; color:#888;">지도를 불러올 수 없습니다.<br>(API Key 확인 필요)</p>';
+        }
         return;
     }
 
-    // 기본 위치 (서울) - HTML5 Geolocation으로 사용자 위치 대체 가능
-    let lat = 37.566826;
-    let lng = 126.9786567;
+    mapKakaoAvailable = true;
 
-    const mapOption = { 
-        center: new kakao.maps.LatLng(lat, lng), 
-        level: 4 
+    // 초기 배너는 숨김(표시 조건에서만 노출)
+    hidePermissionBanner();
+
+    // 기본 위치: 광화문광장
+    lastKnownLat = GWANGHWAMUN_LAT;
+    lastKnownLng = GWANGHWAMUN_LNG;
+
+    const mapOption = {
+        center: new kakao.maps.LatLng(GWANGHWAMUN_LAT, GWANGHWAMUN_LNG),
+        level: 4
     };
 
-    const map = new kakao.maps.Map(mapContainer, mapOption); 
+    map = new kakao.maps.Map(mapContainer, mapOption);
+    placesService = new kakao.maps.services.Places();
 
-    // 사용자 현재 위치 가져오기
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            lat = position.coords.latitude;
-            lng = position.coords.longitude;
+    // 초기 상태: 마커/검색 없음
+    clearLottoMarkers();
+    clearMyLocationMarker();
+
+    mapBaseReady = true;
+}
+
+// ✅ 클릭 1 (지도 클릭)
+// - 즉시 위치 권한 요청(브라우저 팝업)
+// - 허용: 내 위치로 중심 + 로또 검색/마커
+// - 거부/실패: 광화문 유지 + 로또 검색/마커
+// - "영구 차단"(PERMISSION_DENIED): 지도 위 오버레이 안내(1회)
+function handleMapFirstClick() {
+    if (!mapBaseReady || !mapKakaoAvailable) return;
+
+    // 이미 1회 처리(권한요청+검색) 했다면 여기서 처리하지 않음
+    if (mapFirstClickHandled) return;
+
+    mapFirstClickHandled = true;
+
+    // 즉시 위치 권한 요청 (브라우저 기본 팝업만)
+    if (!navigator.geolocation || typeof navigator.geolocation.getCurrentPosition !== 'function') {
+        // 위치 기능 자체가 없으면: 광화문 기준으로 검색만 진행
+        lastKnownLat = GWANGHWAMUN_LAT;
+        lastKnownLng = GWANGHWAMUN_LNG;
+
+        try {
+            map.setCenter(new kakao.maps.LatLng(lastKnownLat, lastKnownLng));
+        } catch (e) {}
+
+        searchAndDisplayLottoMarkers(lastKnownLat, lastKnownLng);
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            // ✅ 허용 시
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            lastKnownLat = lat;
+            lastKnownLng = lng;
+
             const locPosition = new kakao.maps.LatLng(lat, lng);
             map.setCenter(locPosition);
-            
+
             // 내 위치 마커
-            const marker = new kakao.maps.Marker({  
-                map: map, 
+            clearMyLocationMarker();
+            myLocationMarker = new kakao.maps.Marker({
+                map: map,
                 position: locPosition
             });
 
-            // 주변 '로또' 키워드 검색 (장소 검색 객체 생성)
-            const ps = new kakao.maps.services.Places(); 
-            ps.keywordSearch('로또', (data, status, pagination) => {
-                if (status === kakao.maps.services.Status.OK) {
-                    for (let i=0; i<data.length; i++) {
-                        displayMarker(data[i]);    
-                    }
-                }
-            }, {
-                location: locPosition,
-                radius: 2000 // 반경 2km
-            });
+            // 주변 '로또' 키워드 검색 + 마커 표시
+            searchAndDisplayLottoMarkers(lat, lng);
+        },
+        function(error) {
+            // ❌ 거부/실패 시: 광화문 유지 + 광화문 기준 검색
+            lastKnownLat = GWANGHWAMUN_LAT;
+            lastKnownLng = GWANGHWAMUN_LNG;
 
-            function displayMarker(place) {
-                const marker = new kakao.maps.Marker({
-                    map: map,
-                    position: new kakao.maps.LatLng(place.y, place.x) 
-                });
-                // 마커 클릭 시 장소명 인포윈도우
-                kakao.maps.event.addListener(marker, 'click', function() {
-                    const infowindow = new kakao.maps.InfoWindow({zIndex:1});
-                    infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
-                    infowindow.open(map, marker);
-                });
+            try {
+                map.setCenter(new kakao.maps.LatLng(lastKnownLat, lastKnownLng));
+            } catch (e) {}
+
+            // "영구 차단" 상태 UX (PERMISSION_DENIED)
+            // - 팝업이 아예 뜨지 않는 상태는 브라우저별로 감지 완벽 불가
+            // - 다만 PERMISSION_DENIED면 안내 배너를 1회 노출(기획안 확정)
+            if (error && error.code === 1) {
+                showPermissionBlockedBannerOnce();
             }
 
-        });
+            searchAndDisplayLottoMarkers(lastKnownLat, lastKnownLng);
+        },
+        {
+            enableHighAccuracy: false,
+            timeout: 8000,
+            maximumAge: 0
+        }
+    );
+}
+
+// ✅ 클릭 2 이후 (지도 재클릭)
+// - 카카오맵 새 탭 열기
+// - '로또' 검색 결과로 바로 이동
+// - 기준 위치: 내 위치 알면 내 위치, 모르면 광화문
+function handleMapReClickOpenTab() {
+    // 카카오 SDK가 없어도 링크는 열 수 있음(검색 UX를 카카오맵 네이티브로 넘김)
+    // 다만 기준 좌표는 마지막으로 알고 있는 좌표를 사용
+    const lat = lastKnownLat || GWANGHWAMUN_LAT;
+    const lng = lastKnownLng || GWANGHWAMUN_LNG;
+    openKakaoMapSearchTab(lat, lng);
+}
+
+// 기존 함수명 유지 (원본 유지하면서 내부는 "찐최종 기획안" 흐름으로 변경)
+function initMap() {
+    // ✅ 초기 로드: 광화문 지도만 표시 (조용)
+    if (!mapBaseReady) {
+        initMapBaseOnly();
     }
+
+    // map-container-box 클릭 로직
+    const mapBox = document.getElementById('map-container-box');
+    if (!mapBox) return;
+
+    // (중복 바인딩 방지)
+    if (mapBox.dataset.mapClickBound === '1') return;
+    mapBox.dataset.mapClickBound = '1';
+
+    mapBox.addEventListener('click', () => {
+        // 클릭 1: 권한요청 + (허용/거부) 기준으로 검색/마커
+        if (!mapFirstClickHandled) {
+            handleMapFirstClick();
+            return;
+        }
+        // 클릭 2 이후: 카카오맵 새 탭(로또 검색 결과)
+        handleMapReClickOpenTab();
+    });
 }
 
 // ★ 기능 3: 카카오톡 공유 초기화
@@ -216,9 +439,9 @@ function initKakaoShare() {
             alert('먼저 번호를 생성해주세요!');
             return;
         }
-        
+
         const numStr = sortedNumbersCache.join(', ');
-        
+
         try {
             Kakao.Share.sendDefault({
                 objectType: 'text',
@@ -411,17 +634,11 @@ window.addEventListener('load', () => {
         });
     }
 
-    // ★ 지도: 클릭했을 때만 위치 권한 요청 + 지도 로드
-    const mapBox = document.getElementById('map-container-box');
-    let mapInitialized = false;
-
-    if (mapBox) {
-        mapBox.addEventListener('click', () => {
-            if (mapInitialized) return;
-            mapInitialized = true;
-            initMap();
-        });
-    }
+    // ================================
+    // ★ 지도: "초기 로드 즉시 광화문 지도 표시" + 클릭 플로우는 initMap()에 위임 (수정)
+    // ================================
+    // ✅ 초기 상태: 광화문 지도만 즉시 표시 (권한요청/검색/마커 없음)
+    initMap(); // 내부에서 initMapBaseOnly() 실행 + 클릭 핸들러 바인딩
 });
 
 // 3. 번호 생성 로직 (버튼 클릭 이벤트 - 필터 적용 수정)
@@ -434,7 +651,7 @@ generateBtn.addEventListener('click', () => {
         dingSound.currentTime = 0; // 소리 처음부터 재생
         dingSound.play();
     }
-    
+
     // 이전 실행되던 타이머들 다 끄기
     clearInterval(intervalId);
     clearTimeout(timeoutId);
@@ -446,7 +663,7 @@ generateBtn.addEventListener('click', () => {
     // ★ 필터 적용 로직
     // 1. 포함할 번호를 먼저 배열에 넣음
     const finalNumbersSet = new Set([...includeSet]);
-    
+
     // 2. 나머지 번호를 채움 (제외 번호 빼고)
     while (finalNumbersSet.size < 6) {
         const randomNumber = Math.floor(Math.random() * 45) + 1;
@@ -455,9 +672,9 @@ generateBtn.addEventListener('click', () => {
             finalNumbersSet.add(randomNumber);
         }
     }
-    
+
     currentNumbers = Array.from(finalNumbersSet); // 원본(화면 표시용 - 순서는 섞여있을 수 있음)
-    
+
     // 애니메이션을 위해 섞어서 보여줄지, 정렬해서 보여줄지 결정.
     // 로또 추첨처럼 '뽑히는 순서'는 랜덤하게 보여주고, 결과는 정렬.
     // 다만 사용자가 '포함'한 번호가 맨 앞에만 나오면 재미없으므로 currentNumbers를 셔플(Shuffle)
