@@ -258,18 +258,14 @@ function searchAndDisplayLottoMarkers(centerLat, centerLng) {
     );
 }
 
-// (교체) 카카오맵 새 탭 열기 (클릭 2 이후)
-// ✅ 좌표를 URL에 섞지 말고 "로또" 검색 페이지만 연다 (가장 안정적)
-// - PC에서 좌표 섞이면 "로또,위도,경도"를 검색어로 취급해 0건이 자주 뜸
-function openKakaoMapSearchTab() {
+// (추가) 카카오맵 새 탭 열기 (클릭 2 이후)
+function openKakaoMapSearchTab(lat, lng) {
     const q = encodeURIComponent('로또');
-    const url = `https://map.kakao.com/?q=${q}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
-}
 
-// (교체) 클릭 2 이후
-function handleMapReClickOpenTab() {
-    openKakaoMapSearchTab();
+    // ✅ p는 (lat,lng) 순서로 전달
+    const url = `https://m.map.kakao.com/scheme/search?q=${q}&p=${lat},${lng}`;
+
+    window.open(url, '_blank', 'noopener,noreferrer');
 }
 
 // ✅ 초기 상태(페이지 최초 로드)
