@@ -420,6 +420,11 @@ footer a:hover {
   text-decoration: none;
 }
 
+/* footer 링크 - 화면 비율에 따라 자동 조절 */
+footer a {
+  font-size: clamp(12px, 3.5vw, 14px);
+}
+
 /* 페이지 하단 '메인으로' 링크만 (p 안의 링크만) */
 .container p a,
 .container p a:visited,
