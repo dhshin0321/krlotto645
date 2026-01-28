@@ -167,7 +167,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     flex-shrink: 0;
 
     /* ★ 웹: 버튼을 오른쪽에 고정 */
