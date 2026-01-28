@@ -411,3 +411,29 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     background-color: #d32f2f;
   }
 }
+
+/* footer 링크 (보조) */
+footer a,
+footer a:visited,
+footer a:hover {
+  color: #6B7280;
+  text-decoration: none;
+}
+
+/* 페이지 하단 '메인으로' 링크만 (p 안의 링크만) */
+.container p a,
+.container p a:visited,
+.container p a:hover {
+  color: #4B5563;
+  text-decoration: underline;
+}
+
+/* Contact 이메일 - 항상 텍스트처럼 */
+.container a[href^="mailto"],
+.container a[href^="mailto"]:visited,
+.container a[href^="mailto"]:hover,
+.container a[href^="mailto"]:active {
+  color: #111;
+  text-decoration: none;
+  cursor: text;
+}
