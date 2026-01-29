@@ -75,6 +75,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     align-items: center;
     color: white;
     font-size: 18px;
+    line-height: 1; /* ✅ 모바일에서 숫자가 위로 뜨는 현상 보정(웹/모바일 공통) */
 
     /* ✅ placeholder(테두리 포함)든 숫자공(무테)든 겉크기 일관 */
     box-sizing: border-box;
@@ -185,7 +186,18 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     min-width: 0;
     overflow: hidden;
 }
-.history-ball { width: 28px; height: 28px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 12px; font-weight: bold; }
+.history-ball { 
+    width: 28px; 
+    height: 28px; 
+    border-radius: 50%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    color: white; 
+    font-size: 12px; 
+    font-weight: bold; 
+    line-height: 1; /* ✅ 모바일에서 숫자가 위로 뜨는 현상 보정(웹/모바일 공통) */
+}
 
 /* ★ 기록 액션 버튼 */
 .history-actions {
