@@ -774,8 +774,8 @@ function rollAndDisplayNumber(ballElement, finalNumber, index) {
     if (activeRollIntervals[index]) clearInterval(activeRollIntervals[index]);
 
     let rollCounter = 0;
-    const maxRolls = 20; // 20번 숫자가 바뀜
-    const rollDuration = 40; // 바뀌는 속도
+    const maxRolls = 10;
+    const rollDuration = 84; // 총 840ms, 약 11.9Hz
 
     ballElement.classList.remove('placeholder');
     ballElement.style.border = 'none';
