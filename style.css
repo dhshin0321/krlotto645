@@ -54,8 +54,33 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 .kakao-btn:hover { background-color: #E6CF00; }
 
 /* 4. 결과 공(Ball) 스타일 (위치 변경됨) */
-#result { margin-top: 10px; font-size: 24px; font-weight: bold; display: flex; justify-content: center; gap: 8px; min-height: 45px; flex-wrap: wrap; }
-.ball { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 18px; flex-shrink: 0; }
+#result {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    min-height: 45px;
+    flex-wrap: wrap;
+}
+
+/* ✅ 숫자공: 테두리 없이 44px / 빈공: (40+2+2)=44px -> "겉크기" 통일 */
+.ball {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+
+    /* ✅ placeholder(테두리 포함)든 숫자공(무테)든 겉크기 일관 */
+    box-sizing: border-box;
+
+    flex-shrink: 0;
+}
 .ball.placeholder { background-color: transparent; border: 2px solid #e0e0e0; color: transparent; }
 
 /* 오른쪽 사이드바 (기록 + 지도) */
@@ -326,6 +351,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 .prize-table td:nth-child(4) { 
     text-align: right; 
     padding-right: 10px; /* 오른쪽 벽에서 10px 띄움 */
+    white-space: nowrap; /* ✅ 당첨확률 줄바꿈 방지 */
 }
 
 /* 표 열 너비 고정 */
@@ -371,6 +397,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     .prize-table td:nth-child(4) {
         text-align: right;
         padding-right: 2px; /* 모바일은 화면이 좁으니 여백을 5px로 줄임 */
+        white-space: nowrap; /* ✅ 모바일에서도 줄바꿈 방지 */
     }
     /* 필터 버튼 모바일 최적화 */
     .filter-btn {
@@ -385,6 +412,13 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
         right: 8px;
         padding: 9px 10px;
         font-size: 11px;
+    }
+
+    /* ✅ 너무 좁은 기기에서는 44px 고정이 임계점을 넘을 수 있어, 약간 유동으로(최대 44 유지) */
+    .ball {
+        width: clamp(38px, 10.8vw, 44px);
+        height: clamp(38px, 10.8vw, 44px);
+        font-size: 18px;
     }
 }
 
