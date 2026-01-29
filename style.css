@@ -35,7 +35,7 @@ h1 { color: #333; margin-bottom: 20px; line-height: 1.1; }
 h1 .title-lotto { font-family: "Pretendard Variable", sans-serif; font-size: clamp(41px, 8vw, 56px); font-weight: 800; letter-spacing: -1px; display: block; }
 h1 .lotto-normal-size { font-size: 1em; font-weight: inherit; }
 h1 .lotto-small-size { font-size: 0.6em; font-weight: 650; }
-h1 .title-round { display: block; margin-top: 12px; font-size: clamp(18px, 4vw, 24px); font-weight: bold; }
+h1 .title-round { display: block; margin-top: 5px; font-size: clamp(18px, 4vw, 24px); font-weight: bold; }
 h1 .title-date { font-size: 14px; color: #888; font-weight: normal; display: block; margin-top: 3px; }
 
 /* 3. 버튼 스타일 */
