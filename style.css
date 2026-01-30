@@ -41,7 +41,7 @@ h1 .title-date { font-size: 14px; color: #888; font-weight: normal; display: blo
 /* 3. 버튼 스타일 */
 .button-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; margin-top: 25px; }
 button { background-color: #4CAF50; color: white; padding: 12px 24px; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; transition: all 0.3s; font-weight: bold; }
-button:hover { background-color: #45a049; }
+/* button:hover { background-color: #45a049; } */
 button:disabled { background-color: #ccc; cursor: not-allowed; }
 #immediate-generate { background-color: #f44336; }
 /* hover가 존재하는 모든 환경에서 즉시생성 버튼은 진해져라 : 모바일 오류 */
@@ -51,7 +51,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 /* 카카오톡 공유 버튼 스타일 */
 .share-section { margin-bottom: 30px; }
 .kakao-btn { background-color: #FEE500; color: #000000; width: 100%; max-width: 260px; font-size: 16px; display: inline-block; }
-.kakao-btn:hover { background-color: #E6CF00; }
+/* .kakao-btn:hover { background-color: #E6CF00; } */
 
 /* 4. 결과 공(Ball) 스타일 (위치 변경됨) */
 #result {
@@ -465,9 +465,15 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 
 /* PC에서만 즉시생성 hover 효과 */
 @media (hover: hover) and (pointer: fine) {
-    #immediate-generate:hover {
-        background-color: #d32f2f;
-    }
+  button:hover {
+    background-color: #45a049;
+  }
+  #immediate-generate:hover {
+    background-color: #d32f2f;
+  }
+  .kakao-btn:hover {
+    background-color: #E6CF00;
+  }
 }
 
 /* footer 링크 (보조) */
