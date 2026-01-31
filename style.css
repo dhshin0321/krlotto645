@@ -355,7 +355,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     font-size: 14px; 
     table-layout: fixed; 
 }
-.prize-table th { background-color: #e94e6b; color: white; padding: 10px 5px; border: 1px solid #ddd; }
+.prize-table th { background-color: #e94e6b; color: white; padding: 10px 5px; border: 1px solid #ddd; text-align: center; }
 .prize-table td { padding: 10px 5px; border: 1px solid #ddd; text-align: center; color: #333; word-break: keep-all; }
 
 /* ★ 웹(기본) 당첨확률(4번째 칸) 오른쪽 정렬 */
@@ -487,6 +487,11 @@ footer a:hover {
 /* footer 링크 - 화면 비율에 따라 자동 조절 */
 footer a {
     font-size: clamp(12px, 3.5vw, 14px);
+}
+
+/* ✅ 푸터 전체: 줄바꿈 금지 (1줄/2줄 모두 동일 적용) */
+footer {
+    white-space: nowrap;
 }
 
 /* 페이지 하단 '메인으로' 링크만 (p 안의 링크만) */
