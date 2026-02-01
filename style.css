@@ -428,12 +428,6 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
     transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 }
 
-.guide-card:hover{
-    background: #f9fafb;
-    box-shadow: 0 10px 22px rgba(0,0,0,0.10);
-    transform: translateY(-2px);
-}
-
 .guide-card-top{
     display: flex;
     align-items: center;
@@ -609,10 +603,22 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
   .kakao-btn:hover {
     background-color: #E6CF00;
   }
+
+  /* 이용안내 (상단 헤더) */
+  .header-link:hover {
+    background: #eef2ff;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.10);
+    transform: translateY(-1px);
+  }
+  /* 전체 삭제 */
+  .history-clear-btn:hover {
+    background-color: #d5d5d5;
+  }
+  /* 이모지 4개 카드 */
   .guide-card:hover{
-      background: #f9fafb;
-      box-shadow: 0 10px 22px rgba(0,0,0,0.10);
-      transform: translateY(-2px);
+    background: #f9fafb;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.10);
+    transform: translateY(-2px);
   }
 }
 
