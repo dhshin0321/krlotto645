@@ -657,7 +657,7 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
         width: clamp(38px, 10.8vw, 44px);
         height: clamp(38px, 10.8vw, 44px);
         font-size: 18px;
-        padding-top: 0px;
+        padding-top: 2px;
     }
 
     .history-ball {
