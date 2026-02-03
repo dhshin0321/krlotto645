@@ -240,11 +240,13 @@ function searchAndDisplayLottoMarkers(centerLat, centerLng) {
                     // 마커 클릭 시 장소명 표시
                     kakao.maps.event.addListener(marker, 'click', function() {
                         const safeName = place.place_name || '';
-                        mapInfoWindow.setContent(
-                            '<div style="padding:6px 8px;font-size:12px;line-height:1.2;white-space:nowrap;">' +
-                            safeName +
-                            '</div>'
-                        );
+
+                        // ✅ XSS 방지: HTML 문자열 결합 금지, 텍스트로만 삽입
+                        const contentEl = document.createElement('div');
+                        contentEl.style.cssText = 'padding:6px 8px;font-size:12px;line-height:1.2;white-space:nowrap;';
+                        contentEl.textContent = safeName;
+
+                        mapInfoWindow.setContent(contentEl);
                         mapInfoWindow.open(map, marker);
                     });
                 }
