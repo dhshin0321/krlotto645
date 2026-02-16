@@ -2,47 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.krlotto645.com/</loc>
-    <lastmod>2026-01-31</lastmod>
+    <lastmod>2026-02-16</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.krlotto645.com/about.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <priority>0.8</priority>
+    <lastmod>2026-02-07</lastmod>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.krlotto645.com/terms.html</loc>
-    <lastmod>2026-01-31</lastmod>
+    <lastmod>2026-02-07</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.krlotto645.com/privacy.html</loc>
-    <lastmod>2026-01-31</lastmod>
+    <lastmod>2026-02-07</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.krlotto645.com/guide.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.krlotto645.com/lotto-policy.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.krlotto645.com/winning-odds.html</loc>
-    <lastmod>2026-01-31</lastmod>
+    <lastmod>2026-02-07</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.krlotto645.com/lotto-policy.html</loc>
+    <lastmod>2026-02-07</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.krlotto645.com/winning-odds.html</loc>
+    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.krlotto645.com/number-myths.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <priority>0.7</priority>
+    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.krlotto645.com/probability.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <priority>0.7</priority>
+    <lastmod>2026-02-07</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.krlotto645.com/mobile-guide.html</loc>
+    <lastmod>2026-02-16</lastmod>
+    <priority>0.9</priority>
   </url>
 </urlset>

@@ -1,48 +1,111 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>확률기초 원리 | krlotto645</title>
-  <meta name="description" content="로또 6/45에 숨겨진 확률론의 기초를 알아봅니다. 독립 사건의 원리, 컴퓨터 난수 생성 알고리즘(Pseudo-Randomness), 45C6 조합론 등 로또 번호 생성의 수학적 원리를 상세히 설명합니다.">
-  <link rel="canonical" href="https://www.krlotto645.com/probability.html">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5Z8ES8MB05"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-5Z8ES8MB05');
-  </script>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="wrapper">
-    <div class="container" style="display:flex; flex-direction:column; min-height:70vh; padding-left:30px; padding-right:30px;">
-      <h1 style="text-align: center;">로또 번호 생성과 확률론 기초</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>확률기초 원리 | krlotto645</title>
+    <meta
+      name="description"
+      content="로또 6/45에 숨겨진 확률론의 기초를 알아봅니다. 독립 사건의 원리, 컴퓨터 난수 생성 알고리즘(Pseudo-Randomness), 45C6 조합론 등 로또 번호 생성의 수학적 원리를 상세히 설명합니다."
+    />
+    <link rel="canonical" href="https://www.krlotto645.com/probability.html" />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-5Z8ES8MB05"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-5Z8ES8MB05");
+    </script>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9340970572187872"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div
+        class="container"
+        style="
+          display: flex;
+          flex-direction: column;
+          min-height: 70vh;
+          padding-left: 30px;
+          padding-right: 30px;
+        "
+      >
+        <h1 style="text-align: center">로또 번호 생성과 확률론 기초</h1>
 
-      <div style="text-align: left;">
-        <p>우리가 일상에서 접하는 로또 6/45 뒤에는 정교한 수학적 원리가 숨어 있습니다. 번호가 어떻게 선택되는지, 그리고 무작위성이란 무엇인지 이해하는 것은 사이트 서비스를 보다 가치 있게 활용하는 기초가 됩니다. 확률론의 핵심 개념들을 통해 로또 시스템을 심층적으로 분석해 봅니다.</p>
+        <div style="text-align: left">
+          <p>
+            우리가 일상에서 접하는 로또 6/45 뒤에는 정교한 수학적 원리가 숨어
+            있습니다. 번호가 어떻게 선택되는지, 그리고 무작위성이란 무엇인지
+            이해하는 것은 사이트 서비스를 보다 가치 있게 활용하는 기초가 됩니다.
+            확률론의 핵심 개념들을 통해 로또 시스템을 심층적으로 분석해 봅니다.
+          </p>
 
-        <h2 style="margin-top: 28px;">1. 확률의 고전적 정의와 로또</h2>
-        <p>확률은 '전체 경우의 수에 대한 특정 사건이 일어날 경우의 수의 비율'로 정의됩니다. 로또 6/45에서 전체 경우의 수는 8,145,060입니다. 우리가 단 한 게임(1,000원)을 구매했을 때의 성공 확률은 이 수치의 역수입니다. 만약 10개를 산다면 8,145,060분의 10이 되겠지만, 여전히 확률은 0.00012% 수준에 불과합니다. 수학적으로 확률을 높이는 유일한 방법은 '더 많은 조합을 구매하는 것'뿐입니다.</p>
+          <h2 style="margin-top: 28px">1. 확률의 고전적 정의와 로또</h2>
+          <p>
+            확률은 '전체 경우의 수에 대한 특정 사건이 일어날 경우의 수의 비율'로
+            정의됩니다. 로또 6/45에서 전체 경우의 수는 8,145,060입니다. 우리가
+            단 한 게임(1,000원)을 구매했을 때의 성공 확률은 이 수치의
+            역수입니다. 만약 10개를 산다면 8,145,060분의 10이 되겠지만, 여전히
+            확률은 0.00012% 수준에 불과합니다. 수학적으로 확률을 높이는 유일한
+            방법은 '더 많은 조합을 구매하는 것'뿐입니다.
+          </p>
 
-        <h2 style="margin-top: 26px;">2. 독립 사건과 조건부 확률의 오해</h2>
-        <p>확률론에는 '독립 사건'이라는 개념이 있습니다. 주사위를 두 번 던질 때, 첫 번째 결과가 두 번째에 영향을 주지 않는다면 두 사건은 독립적입니다. 로또 역시 마찬가지입니다. 1회차부터 현재까지 쌓인 수천 개의 데이터는 다음 회차를 예측하는 '조건'이 될 수 없습니다. 조건부 확률이 적용되려면 이전 공이 기계 밖으로 제거된 상태에서 계속 추첨해야 하지만, 로또는 매주 45개의 공을 다시 넣고 시작하기 때문입니다.</p>
+          <h2 style="margin-top: 26px">2. 독립 사건과 조건부 확률의 오해</h2>
+          <p>
+            확률론에는 '독립 사건'이라는 개념이 있습니다. 주사위를 두 번 던질
+            때, 첫 번째 결과가 두 번째에 영향을 주지 않는다면 두 사건은
+            독립적입니다. 로또 역시 마찬가지입니다. 1회차부터 현재까지 쌓인 수천
+            개의 데이터는 다음 회차를 예측하는 '조건'이 될 수 없습니다. 조건부
+            확률이 적용되려면 이전 공이 기계 밖으로 제거된 상태에서 계속
+            추첨해야 하지만, 로또는 매주 45개의 공을 다시 넣고 시작하기
+            때문입니다.
+          </p>
 
-        <h2 style="margin-top: 26px;">3. 난수 생성 알고리즘 (Pseudo-Randomness)</h2>
-        <p>컴퓨터 서비스에서 번호를 생성할 때 사용하는 방식은 '의사 난수(Pseudo-random)' 생성입니다. 진정한 의미의 물리적 무작위성은 자연계(방사능 붕괴 등)에서만 가능하지만, 현대의 알고리즘은 인간이 패턴을 결코 파악할 수 없을 만큼 정교한 수열을 만들어냅니다. 본 사이트의 생성 기능 역시 이러한 수학적 무작위성을 활용하여, 특정 번호에 치우치지 않는 공정한 조합을 제공하는 데 목적을 두고 있습니다.</p>
+          <h2 style="margin-top: 26px">
+            3. 난수 생성 알고리즘 (Pseudo-Randomness)
+          </h2>
+          <p>
+            컴퓨터 서비스에서 번호를 생성할 때 사용하는 방식은 '의사
+            난수(Pseudo-random)' 생성입니다. 진정한 의미의 물리적 무작위성은
+            자연계(방사능 붕괴 등)에서만 가능하지만, 현대의 알고리즘은 인간이
+            패턴을 결코 파악할 수 없을 만큼 정교한 수열을 만들어냅니다. 본
+            사이트의 생성 기능 역시 이러한 수학적 무작위성을 활용하여, 특정
+            번호에 치우치지 않는 공정한 조합을 제공하는 데 목적을 두고 있습니다.
+          </p>
 
-        <h2 style="margin-top: 26px;">4. 확률적 사고의 중요성</h2>
-        <p>확률적 사고란 결과가 아닌 과정을 이해하는 것입니다. 1등 당첨자가 나오는 것은 '필연'입니다(누군가는 그 조합을 샀기 때문). 하지만 그 당첨자가 '나'일 확률은 극히 낮다는 것을 인정하는 것에서부터 건전한 복권 문화가 시작됩니다. 확률은 미래를 예언하는 도구가 아니라, 발생 가능한 위험과 기회를 수치로 보여주는 가이드라인입니다.</p>
+          <h2 style="margin-top: 26px">4. 확률적 사고의 중요성</h2>
+          <p>
+            확률적 사고란 결과가 아닌 과정을 이해하는 것입니다. 1등 당첨자가
+            나오는 것은 '필연'입니다(누군가는 그 조합을 샀기 때문). 하지만 그
+            당첨자가 '나'일 확률은 극히 낮다는 것을 인정하는 것에서부터 건전한
+            복권 문화가 시작됩니다. 확률은 미래를 예언하는 도구가 아니라, 발생
+            가능한 위험과 기회를 수치로 보여주는 가이드라인입니다.
+          </p>
 
-        <h2 style="margin-top: 26px;">5. 보너스 지식: 왜 45개 숫자인가?</h2>
-        <p>숫자의 개수와 뽑는 개수는 당첨 확률과 직접적인 연관이 있습니다. 45개 중 6개를 뽑는 방식은 당첨자가 적절히 발생하여 당첨금이 매력적인 수준으로 유지되도록 설계된 '수학적 밸런스'의 결과입니다. 만약 숫자가 50개로 늘어난다면 당첨 확률은 약 1,500만 분의 1로 급격히 떨어지게 됩니다.</p>
+          <h2 style="margin-top: 26px">5. 보너스 지식: 왜 45개 숫자인가?</h2>
+          <p>
+            숫자의 개수와 뽑는 개수는 당첨 확률과 직접적인 연관이 있습니다. 45개
+            중 6개를 뽑는 방식은 당첨자가 적절히 발생하여 당첨금이 매력적인
+            수준으로 유지되도록 설계된 '수학적 밸런스'의 결과입니다. 만약 숫자가
+            50개로 늘어난다면 당첨 확률은 약 1,500만 분의 1로 급격히 떨어지게
+            됩니다.
+          </p>
+        </div>
+
+        <p style="margin-top: auto; padding-top: 24px; text-align: center">
+          <a href="index.html">← 메인으로</a>
+        </p>
       </div>
-
-      <p style="margin-top:auto; padding-top:24px; text-align:center;">
-        <a href="index.html">← 메인으로</a>
-      </p>
     </div>
-  </div>
-</body>
+  </body>
 </html>

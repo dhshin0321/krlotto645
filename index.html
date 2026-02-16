@@ -1,280 +1,379 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="naver-site-verification" content="612b105c8ec731f9fbb970d290787e62169a36fe" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="naver-site-verification"
+      content="612b105c8ec731f9fbb970d290787e62169a36fe"
+    />
     <title>로또 6/45 번호 생성기 & 당첨 확률 분석 가이드 | krlotto645</title>
-    <meta name="description" content="로또 6/45 번호 생성 및 당첨 확률 분석 서비스를 제공합니다. 행운을 나누는 마음으로 제작되었습니다. 가벼운 마음으로 행운 번호를 확인해 보세요.">
-    <link rel="canonical" href="https://www.krlotto645.com">
+    <meta
+      name="description"
+      content="로또 6/45 번호 생성 및 당첨 확률 분석 서비스를 제공합니다. 행운을 나누는 마음으로 제작되었습니다. 가벼운 마음으로 행운 번호를 확인해 보세요."
+    />
+    <link rel="canonical" href="https://www.krlotto645.com" />
     <!-- Google tag (gtag.js) - Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5Z8ES8MB05"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-5Z8ES8MB05"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5Z8ES8MB05');
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-5Z8ES8MB05");
     </script>
     <!-- Pretendard Variable 폰트 -->
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.css">
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e7792702246bec1c4bf599bf666f71aa&libraries=services"></script>
-    <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js" crossorigin="anonymous"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9340970572187872" crossorigin="anonymous"></script>
-</head>
-<body>
-
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/variable/pretendardvariable.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e7792702246bec1c4bf599bf666f71aa&libraries=services"
+    ></script>
+    <script
+      src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9340970572187872"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
     <!-- ✅ 1) 상단 헤더 (신설) -->
     <div class="wrapper top-header-row">
-        <header class="site-header">
-            <div class="site-header-inner">
-                <!-- 왼쪽 브랜드명: 클릭 시 홈(새로고침) -->
-                <a class="brand" href="index.html" aria-label="홈으로">로또 6/45 번호 생성기</a>
+      <header class="site-header">
+        <div class="site-header-inner">
+          <!-- 왼쪽 브랜드명: 클릭 시 홈(새로고침) -->
+          <a class="brand" href="index.html" aria-label="홈으로"
+            >로또 6/45 번호 생성기</a
+          >
 
-                <!-- 오른쪽 메뉴: 이용안내 -->
-                <a class="header-link" href="guide.html">이용안내</a>
-            </div>
-        </header>
-        <div class="sidebar-spacer" aria-hidden="true"></div>
+          <!-- 오른쪽 메뉴: 이용안내 -->
+          <a class="header-link" href="guide.html">이용안내</a>
+        </div>
+      </header>
+      <div class="sidebar-spacer" aria-hidden="true"></div>
     </div>
 
     <!-- ✅ 2) 기존: 번호 생성 도구 + 필터 + 기록/지도 (순서 유지) -->
     <div class="wrapper">
-        <div class="container">
-            <h1>
-                <span class="title-lotto">
-                    <span class="lotto-normal-size" style="color: #004EA2;">L</span><span class="lotto-normal-size" style="color: #00A0D2;">o</span><span class="lotto-normal-size" style="color: #004EA2;">tt</span><span class="lotto-normal-size" style="color: #8FC31F;">o</span><span class="lotto-small-size" style="color: #004EA2;">6</span><span class="lotto-small-size" style="color: #8FC31F;">/</span><span class="lotto-small-size" style="color: #004EA2;">45</span>
-                </span>
+      <div class="container home-page">
+        <!-- ✅ (이동) 상단 안내 배너: 흰색 박스(.container) 안 -->
+        <a
+          href="mobile-guide.html"
+          class="notice-bar"
+          aria-label="로또 모바일 구매 방법 안내 페이지로 이동"
+        >
+          📢 [안내] 로또 모바일 구매 방법 확인하기
+        </a>
 
-                <span class="title-round">
-                    <span id="currentRound">1209</span>회차 번호 생성기
-                </span>
+        <h1>
+          <span class="title-lotto">
+            <span class="lotto-normal-size" style="color: #004ea2">L</span
+            ><span class="lotto-normal-size" style="color: #00a0d2">o</span
+            ><span class="lotto-normal-size" style="color: #004ea2">tt</span
+            ><span class="lotto-normal-size" style="color: #8fc31f">o</span
+            ><span class="lotto-small-size" style="color: #004ea2">6</span
+            ><span class="lotto-small-size" style="color: #8fc31f">/</span
+            ><span class="lotto-small-size" style="color: #004ea2">45</span>
+          </span>
 
-                <span class="title-date">
-                    (<span id="currentDate">2026-01-31</span> 추첨 예정)
-                </span>
-            </h1>
+          <span class="title-round">
+            <span id="currentRound">1209</span>회차 번호 생성기
+          </span>
 
-            <div id="result">
-                <div class="ball placeholder"></div>
-                <div class="ball placeholder"></div>
-                <div class="ball placeholder"></div>
-                <div class="ball placeholder"></div>
-                <div class="ball placeholder"></div>
-                <div class="ball placeholder"></div>
-            </div>
+          <span class="title-date">
+            (<span id="currentDate">2026-01-31</span> 추첨 예정)
+          </span>
+        </h1>
 
-            <div class="button-group">
-                <button id="generate">번호 생성</button>
-                <button id="immediate-generate" class="hidden">즉시 생성</button>
-            </div>
-
-            <div class="share-section">
-                <button id="kakao-share-btn" class="kakao-btn">🍀 행운 보내기 (카카오톡)</button>
-            </div>
-
-            <div class="filter-wrapper">
-                <p class="filter-note">* 1부터 45까지의 숫자 중 중복 없이 6개의 번호를 무작위로 추출합니다.</p>
-                <h3>번호 필터 설정</h3>
-
-                <div class="filter-section">
-                    <div class="filter-header">
-                        <span>포함할 번호 (최대 5개)</span>
-                        <span class="count-badge" id="include-count">0/5</span>
-                    </div>
-                    <div id="include-numbers-container" class="number-grid"></div>
-                </div>
-
-                <div class="filter-section">
-                    <div class="filter-header">
-                        <span>제외할 번호 (최대 38개)</span>
-                        <span class="count-badge" id="exclude-count">0/38</span>
-                    </div>
-                    <div id="exclude-numbers-container" class="number-grid"></div>
-                </div>
-            </div>
+        <div id="result">
+          <div class="ball placeholder"></div>
+          <div class="ball placeholder"></div>
+          <div class="ball placeholder"></div>
+          <div class="ball placeholder"></div>
+          <div class="ball placeholder"></div>
+          <div class="ball placeholder"></div>
         </div>
 
-        <div class="sidebar">
-            <div id="history-container">
-                <div class="history-header">
-                    <h2>번호 기록</h2>
-                    <button id="history-clear-btn" class="history-clear-btn">전체 삭제</button>
-                </div>
-                <p class="history-limit-info">최대 30개까지 저장되며, 초과 시 오래된 기록부터 삭제됩니다.</p>
-                <div id="history-list"></div>
-            </div>
-
-            <div id="map-container-box">
-                <h2>📍 주변 로또 판매점</h2>
-
-                <div id="map-permission-banner" class="map-permission-banner" style="display:none;">
-                    위치 권한이 차단되어 있어요.<br>
-                    주소창 옆 🔒 아이콘에서 위치 허용으로 바꿀 수 있어요.
-                </div>
-
-                <div id="map"></div>
-                <p class="map-info">* 현재 위치 기준으로 가까운 로또 판매점을 표시합니다.</p>
-            </div>
+        <div class="button-group">
+          <button id="generate">번호 생성</button>
+          <button id="immediate-generate" class="hidden">즉시 생성</button>
         </div>
+
+        <div class="share-section">
+          <button id="kakao-share-btn" class="kakao-btn">
+            🍀 행운 보내기 (카카오톡)
+          </button>
+        </div>
+
+        <div class="filter-wrapper">
+          <p class="filter-note">
+            * 1부터 45까지의 숫자 중 중복 없이 6개의 번호를 무작위로 추출합니다.
+          </p>
+          <h3>번호 필터 설정</h3>
+
+          <div class="filter-section">
+            <div class="filter-header">
+              <span>포함할 번호 (최대 5개)</span>
+              <span class="count-badge" id="include-count">0/5</span>
+            </div>
+            <div id="include-numbers-container" class="number-grid"></div>
+          </div>
+
+          <div class="filter-section">
+            <div class="filter-header">
+              <span>제외할 번호 (최대 38개)</span>
+              <span class="count-badge" id="exclude-count">0/38</span>
+            </div>
+            <div id="exclude-numbers-container" class="number-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div id="history-container">
+          <div class="history-header">
+            <h2>번호 기록</h2>
+            <button id="history-clear-btn" class="history-clear-btn">
+              전체 삭제
+            </button>
+          </div>
+          <p class="history-limit-info">
+            최대 30개까지 저장되며, 초과 시 오래된 기록부터 삭제됩니다.
+          </p>
+          <div id="history-list"></div>
+        </div>
+
+        <div id="map-container-box">
+          <h2>📍 주변 로또 판매점</h2>
+
+          <div
+            id="map-permission-banner"
+            class="map-permission-banner"
+            style="display: none"
+          >
+            위치 권한이 차단되어 있어요.<br />
+            주소창 옆 🔒 아이콘에서 위치 허용으로 바꿀 수 있어요.
+          </div>
+
+          <div id="map"></div>
+          <p class="map-info">
+            * 현재 위치 기준으로 가까운 로또 판매점을 표시합니다.
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- ✅ 3) 아래 콘텐츠 영역: 이용안내 → (신설) 전문 가이드 → 당첨구조 -->
     <div id="explanation-container">
-        <!-- 3-1) 기존: 이용안내 -->
-        <h2 class="guide-title">🍀 로또 번호 생성기 이용 안내</h2>
-        <ul class="guide-list">
-            <li>1부터 45까지의 숫자 중 중복 없이 6개의 번호를 무작위로 추출합니다.</li>
-            <li>매주 토요일 추첨되는 로또 6/45의 공식 규칙을 따르며, 생성된 번호는 하단/우측 기록에 자동으로 저장됩니다.</li>
-            <li>행운을 나누는 마음으로 제작되었습니다. 가벼운 마음으로 행운 번호를 확인해 보세요.</li>
-        </ul>
+      <!-- 3-1) 기존: 이용안내 -->
+      <h2 class="guide-title">🍀 로또 번호 생성기 이용 안내</h2>
+      <ul class="guide-list">
+        <li>
+          1부터 45까지의 숫자 중 중복 없이 6개의 번호를 무작위로 추출합니다.
+        </li>
+        <li>
+          매주 토요일 추첨되는 로또 6/45의 공식 규칙을 따르며, 생성된 번호는
+          하단/우측 기록에 자동으로 저장됩니다.
+        </li>
+        <li>
+          행운을 나누는 마음으로 제작되었습니다. 가벼운 마음으로 행운 번호를
+          확인해 보세요.
+        </li>
+      </ul>
 
-        <!-- 3-2) ✅ 신설: 로또 전문 가이드 & 심층 분석 -->
-        <section class="deep-guide" aria-label="로또 전문 가이드 및 심층 분석">
-            <h2 class="deep-guide-title">📘 로또 전문 가이드 & 심층 분석</h2>
-            <p class="deep-guide-intro">
-                로또는 단순한 운이 아닌 정교한 수학적 확률의 영역입니다. 번호 하나에 담긴 수학적 원리부터 사람들이 흔히 착각하는 로또의 진실까지,
-                운영팀이 직접 정리한 심층 리포트를 확인해 보세요. 알고 즐기면 로또가 더욱 건전하고 즐거워집니다.
-            </p>
+      <!-- 3-2) ✅ 신설: 로또 전문 가이드 & 심층 분석 -->
+      <section class="deep-guide" aria-label="로또 전문 가이드 및 심층 분석">
+        <h2 class="deep-guide-title">📘 로또 전문 가이드 & 심층 분석</h2>
+        <p class="deep-guide-intro">
+          로또는 단순한 운이 아닌 정교한 수학적 확률의 영역입니다. 번호 하나에
+          담긴 수학적 원리부터 사람들이 흔히 착각하는 로또의 진실까지, 운영팀이
+          직접 정리한 심층 리포트를 확인해 보세요. 알고 즐기면 로또가 더욱
+          건전하고 즐거워집니다.
+        </p>
 
-            <div class="deep-guide-grid">
-                <a class="guide-card" href="winning-odds.html">
-                    <div class="guide-card-top">
-                        <h3 class="guide-card-title">
-                            <span class="guide-card-icon" aria-hidden="true">📊</span>
-                            <span class="guide-card-text">당첨 확률 분석</span>
-                        </h3>
-                    </div>
-                    <p class="guide-card-desc">814만 분의 1, 수학으로 본 실질적 의미</p>
-                </a>
-
-                <a class="guide-card" href="number-myths.html">
-                    <div class="guide-card-top">
-                        <h3 class="guide-card-title">
-                            <span class="guide-card-icon" aria-hidden="true">⚠️</span>
-                            <span class="guide-card-text">번호 선택의 오해</span>
-                        </h3>
-                    </div>
-                    <p class="guide-card-desc">미신 타파! 과학적 근거로 바로잡는 로또 상식</p>
-                </a>
-
-                <a class="guide-card" href="probability.html">
-                    <div class="guide-card-top">
-                        <h3 class="guide-card-title">
-                            <span class="guide-card-icon" aria-hidden="true">📐</span>
-                            <span class="guide-card-text">확률론 기초</span>
-                        </h3>
-                    </div>
-                    <p class="guide-card-desc">난수 생성과 독립 사건, 알고리즘의 원리</p>
-                </a>
-
-                <a class="guide-card" href="lotto-policy.html">
-                    <div class="guide-card-top">
-                        <h3 class="guide-card-title">
-                            <span class="guide-card-icon" aria-hidden="true">🏛️</span>
-                            <span class="guide-card-text">로또 정책 및 제도 안내</span>
-                        </h3>
-                    </div>
-                    <p class="guide-card-desc">세금 계산부터 복권 기금 운영까지</p>
-                </a>
+        <div class="deep-guide-grid">
+          <a class="guide-card" href="winning-odds.html">
+            <div class="guide-card-top">
+              <h3 class="guide-card-title">
+                <span class="guide-card-icon" aria-hidden="true">📊</span>
+                <span class="guide-card-text">당첨 확률 분석</span>
+              </h3>
             </div>
-        </section>
+            <p class="guide-card-desc">814만 분의 1, 수학으로 본 실질적 의미</p>
+          </a>
 
-        <!-- 3-3) 기존: 당첨구조 표 -->
-        <h2 class="prize-title">🏆 당첨구조</h2>
-        <div class="table-responsive">
-            <table class="prize-table">
-                <thead>
-                    <tr>
-                        <th>등위</th>
-                        <th>당첨조건</th>
-                        <th>당첨금</th>
-                        <th>당첨확률</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1등</td>
-                        <td>
-                            6개 번호 일치
-                            <div class="match-dots">
-                                <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span>
-                            </div>
-                        </td>
-                        <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 75%</td>
-                        <td>1 / 8,145,060</td>
-                    </tr>
-                    <tr>
-                        <td>2등</td>
-                        <td>
-                            5개 + 보너스 일치
-                            <div class="match-dots">
-                                <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot bonus-plus">+</span><span class="dot bonus"></span>
-                            </div>
-                        </td>
-                        <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 12.5%</td>
-                        <td>1 / 1,357,510</td>
-                    </tr>
-                    <tr>
-                        <td>3등</td>
-                        <td>
-                            5개 번호 일치
-                            <div class="match-dots">
-                                <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span>
-                            </div>
-                        </td>
-                        <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 12.5%</td>
-                        <td>1 / 35,724</td>
-                    </tr>
-                    <tr>
-                        <td>4등</td>
-                        <td>
-                            4개 번호 일치
-                            <div class="match-dots">
-                                <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span>
-                            </div>
-                        </td>
-                        <td>50,000원</td>
-                        <td>1 / 733</td>
-                    </tr>
-                    <tr>
-                        <td>5등</td>
-                        <td>
-                            3개 번호 일치
-                            <div class="match-dots">
-                                <span class="dot active"></span><span class="dot active"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
-                            </div>
-                        </td>
-                        <td>5,000원</td>
-                        <td>1 / 45</td>
-                    </tr>
-                </tbody>
-            </table>
+          <a class="guide-card" href="number-myths.html">
+            <div class="guide-card-top">
+              <h3 class="guide-card-title">
+                <span class="guide-card-icon" aria-hidden="true">⚠️</span>
+                <span class="guide-card-text">번호 선택의 오해</span>
+              </h3>
+            </div>
+            <p class="guide-card-desc">
+              미신 타파! 과학적 근거로 바로잡는 로또 상식
+            </p>
+          </a>
+
+          <a class="guide-card" href="probability.html">
+            <div class="guide-card-top">
+              <h3 class="guide-card-title">
+                <span class="guide-card-icon" aria-hidden="true">📐</span>
+                <span class="guide-card-text">확률론 기초</span>
+              </h3>
+            </div>
+            <p class="guide-card-desc">
+              난수 생성과 독립 사건, 알고리즘의 원리
+            </p>
+          </a>
+
+          <a class="guide-card" href="lotto-policy.html">
+            <div class="guide-card-top">
+              <h3 class="guide-card-title">
+                <span class="guide-card-icon" aria-hidden="true">🏛️</span>
+                <span class="guide-card-text">로또 정책 및 제도 안내</span>
+              </h3>
+            </div>
+            <p class="guide-card-desc">세금 계산부터 복권 기금 운영까지</p>
+          </a>
         </div>
+      </section>
+
+      <!-- 3-3) 기존: 당첨구조 표 -->
+      <h2 class="prize-title">🏆 당첨구조</h2>
+      <div class="table-responsive">
+        <table class="prize-table">
+          <thead>
+            <tr>
+              <th>등위</th>
+              <th>당첨조건</th>
+              <th>당첨금</th>
+              <th>당첨확률</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1등</td>
+              <td>
+                6개 번호 일치
+                <div class="match-dots">
+                  <span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span>
+                </div>
+              </td>
+              <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 75%</td>
+              <td>1 / 8,145,060</td>
+            </tr>
+            <tr>
+              <td>2등</td>
+              <td>
+                5개 + 보너스 일치
+                <div class="match-dots">
+                  <span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span><span class="dot"></span
+                  ><span class="dot bonus-plus">+</span
+                  ><span class="dot bonus"></span>
+                </div>
+              </td>
+              <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 12.5%</td>
+              <td>1 / 1,357,510</td>
+            </tr>
+            <tr>
+              <td>3등</td>
+              <td>
+                5개 번호 일치
+                <div class="match-dots">
+                  <span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span><span class="dot"></span>
+                </div>
+              </td>
+              <td>총 당첨금 중 4등, 5등 금액을 제외한 금액의 12.5%</td>
+              <td>1 / 35,724</td>
+            </tr>
+            <tr>
+              <td>4등</td>
+              <td>
+                4개 번호 일치
+                <div class="match-dots">
+                  <span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span><span class="dot"></span
+                  ><span class="dot"></span>
+                </div>
+              </td>
+              <td>50,000원</td>
+              <td>1 / 733</td>
+            </tr>
+            <tr>
+              <td>5등</td>
+              <td>
+                3개 번호 일치
+                <div class="match-dots">
+                  <span class="dot active"></span
+                  ><span class="dot active"></span
+                  ><span class="dot active"></span><span class="dot"></span
+                  ><span class="dot"></span><span class="dot"></span>
+                </div>
+              </td>
+              <td>5,000원</td>
+              <td>1 / 45</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- ✅ 기존 푸터 유지 -->
-    <footer style="padding: 24px 16px; text-align:center; font-size:14px; color:#666;">
-        <a href="about.html">소개</a>
-        <span style="margin:0 8px;">|</span>
-        <a href="terms.html">이용약관</a>
-        <span style="margin:0 8px;">|</span>
-        <a href="privacy.html">개인정보처리방침</a>
-        <span style="margin:0 8px;">|</span>
-        <a href="guide.html">이용안내</a>
+    <footer
+      style="
+        padding: 24px 16px;
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+      "
+    >
+      <a href="about.html">소개</a>
+      <span style="margin: 0 8px">|</span>
+      <a href="terms.html">이용약관</a>
+      <span style="margin: 0 8px">|</span>
+      <a href="privacy.html">개인정보처리방침</a>
+      <span style="margin: 0 8px">|</span>
+      <a href="guide.html">이용안내</a>
 
-        <br>
+      <br />
 
-        <a href="winning-odds.html">당첨확률</a>
-        <span style="margin:0 8px;">|</span>
-        <a href="number-myths.html">번호오해</a>
-        <span style="margin:0 8px;">|</span>
-        <a href="probability.html">확률기초</a>
-        <span style="margin:0 8px;">|</span>
-        <a href="lotto-policy.html">로또정책</a>
+      <a href="winning-odds.html">당첨확률</a>
+      <span style="margin: 0 8px">|</span>
+      <a href="number-myths.html">번호오해</a>
+      <span style="margin: 0 8px">|</span>
+      <a href="probability.html">확률기초</a>
+      <span style="margin: 0 8px">|</span>
+      <a href="lotto-policy.html">로또정책</a>
     </footer>
 
     <audio id="dingSound" src="ding.mp3" preload="auto"></audio>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
