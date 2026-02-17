@@ -43,7 +43,7 @@ body {
   white-space: nowrap; /* 절대 줄바꿈 금지 */
   overflow: hidden;
 
-  font-size: clamp(17px, 4.6vw, 21px);
+  font-size: clamp(18px, 4.6vw, 21px);
   letter-spacing: -0.2px;
 
   /* ✅ (수정) 헤더 브랜드 폰트만 Pretendard 적용 */
