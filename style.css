@@ -225,7 +225,7 @@ button:disabled {
 .analysis-line {
   height: 28px;
   line-height: 28px;
-  font-size: 15px;
+  font-size: 16px;
   text-align: center;
 
   display: flex;
