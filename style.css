@@ -46,7 +46,7 @@ body {
   font-size: clamp(18px, 4.6vw, 21px);
   letter-spacing: -0.2px;
 
-  /* ✅ (수정) 헤더 브랜드 폰트만 Pretendard 적용 */
+  /* 헤더 브랜드 폰트만 Pretendard 적용 */
   font-family: "Pretendard Variable", sans-serif;
 }
 
@@ -82,7 +82,7 @@ body {
   max-width: 790px;
 }
 
-/* ✅ (수정) 상단 안내 배너 - 공지 느낌 강화(미세 배경 + 라인) */
+/* 상단 안내 배너 - 공지 느낌 강화(미세 배경 + 라인) */
 .notice-bar {
   display: block;
   width: 100%;
@@ -173,7 +173,7 @@ button {
   color: white;
   padding: 12px 24px;
   border: none;
-  /* ✅ (수정) 버튼 radius 통일 */
+  /* 버튼 radius 통일 */
   border-radius: 10px;
   font-size: 18px;
   cursor: pointer;
@@ -205,7 +205,7 @@ button:disabled {
   padding: 12px 18px;
   font-size: 16px;
   display: inline-block;
-  /* ✅ (수정) 버튼 radius 통일 */
+  /* 버튼 radius 통일 */
   border-radius: 10px;
 }
 
@@ -219,6 +219,129 @@ button:disabled {
   gap: 8px;
   min-height: 45px;
   flex-wrap: wrap;
+}
+
+/* ✅ 분석 라인 기본 영역 */
+.analysis-line {
+  height: 28px;
+  line-height: 28px;
+  font-size: 15px;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 10px;
+  margin-bottom: 4px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ✅ 홀짝 / 저고 / 합계 텍스트는 항상 검정 볼드 */
+.analysis-line .metric-label {
+  color: #111;
+  font-weight: 800;
+}
+
+/* ✅ 구분자 */
+.analysis-line .sep {
+  color: #111;
+  font-weight: 400;
+}
+
+/* ✅ Best 등급 텍스트 (초록 볼드) */
+.analysis-line .grade-best {
+  color: #16a34a;
+  font-weight: 800;
+}
+
+/* ✅ Good 등급 텍스트 (검정 볼드) */
+.analysis-line .grade-good {
+  color: #2563eb;
+  font-weight: 800;
+}
+
+/* ✅ Soso 등급 텍스트 (검정 일반) */
+.analysis-line .grade-soso {
+  color: #111;
+  font-weight: 400;
+}
+
+/* ✅ Best 수치 (초록 볼드) */
+.analysis-line .num-best {
+  color: #16a34a;
+  font-weight: 800;
+}
+
+/* ✅ Good 수치 (검정 볼드) */
+.analysis-line .num-good {
+  color: #2563eb;
+  font-weight: 800;
+}
+
+/* ✅ Soso 기본 수치 (검정 일반) */
+.analysis-line .num-soso {
+  color: #111;
+  font-weight: 400;
+}
+
+/* ✅ Soso 황금조건 수치 (검정 볼드) */
+.analysis-line .num-soso-hit {
+  color: #4f8ff7;
+  font-weight: 800;
+}
+
+/* ✅ 분석 라인 Fade-in 애니메이션 */
+@keyframes analysisFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ✅ 등급/숫자 전용 애니메이션 */
+.analysis-line .analysis-anim {
+  opacity: 0;
+  transform: translateY(3px);
+}
+
+.analysis-line .analysis-anim.fade-in-item {
+  animation: analysisFadeIn 0.18s ease-out forwards;
+}
+
+/* ✅ 가운데 정렬에서도 절대 안 흔들리게: 등급/값 영역 폭 고정 + 숫자 폭 고정 */
+.analysis-line .grade-fixed {
+  display: inline-flex;
+  align-items: center;
+  width: 84px;
+  flex: 0 0 84px;
+}
+
+.analysis-line .val-fixed-oe {
+  width: 22px;
+  display: inline-block;
+  text-align: left;
+} /* 6:0 */
+.analysis-line .val-fixed-lh {
+  width: 22px;
+  display: inline-block;
+  text-align: left;
+} /* 2:4 */
+.analysis-line .val-fixed-sum {
+  width: 22px;
+  display: inline-block;
+  text-align: left;
+} /* 166 */
+
+.analysis-line {
+  font-variant-numeric: tabular-nums; /* ✅ 1/8 같은 숫자 폭 차이 제거 */
 }
 
 /* 숫자공: 테두리 없이 44px / 빈공: (40+2+2)=44px -> "겉크기" 통일 */
@@ -303,7 +426,7 @@ button:disabled {
   color: #333;
   padding: 6px 10px;
   border: none;
-  /* ✅ (수정) 버튼 radius 통일 */
+  /* 버튼 radius 통일 */
   border-radius: 10px;
   font-size: 12px;
   cursor: pointer;
@@ -490,13 +613,13 @@ button:disabled {
 
 .filter-section {
   margin-bottom: 25px;
-  /* ✅ (추가) 섹션 전체 배경 적용을 위한 여백 */
+  /* 섹션 전체 배경 적용을 위한 여백 */
   padding: 12px 10px;
-  /* ✅ (추가) 섹션을 카드처럼 정돈 */
+  /* 섹션을 카드처럼 정돈 */
   border-radius: 10px;
 }
 
-/* ✅ (추가) 포함/제외 섹션 전체 배경(A안) */
+/* 포함/제외 섹션 전체 배경(A안) */
 .filter-section:first-of-type {
   background: #f0f7ff;
 }
@@ -513,9 +636,9 @@ button:disabled {
   font-weight: bold;
   color: #555;
 
-  /* ✅ (추가) 헤더/숫자 구분선 여백 */
+  /* 헤더/숫자 구분선 여백 */
   padding-bottom: 10px;
-  /* ✅ (추가) 헤더/숫자 사이 얇은 라인 */
+  /* 헤더/숫자 사이 얇은 라인 */
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
@@ -531,7 +654,7 @@ button:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  /* ✅ (추가) 헤더 라인 아래 간격 */
+  /* 헤더 라인 아래 간격 */
   margin-top: 10px;
 }
 
@@ -639,9 +762,9 @@ button:disabled {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   padding: 14px 14px;
-  /* ✅ (수정) 좌측 컬러 라인 공간 확보 */
+  /* 좌측 컬러 라인 공간 확보 */
   padding-left: 16px;
-  /* ✅ (추가) 좌측 라인 배치용 */
+  /* 좌측 라인 배치용 */
   position: relative;
   transition:
     transform 0.12s ease,
@@ -649,7 +772,7 @@ button:disabled {
     background 0.12s ease;
 }
 
-/* ✅ (추가) 가이드 카드 좌측 얇은 컬러 라인(기본) */
+/* 가이드 카드 좌측 얇은 컬러 라인(기본) */
 .guide-card::before {
   content: "";
   position: absolute;
@@ -661,7 +784,7 @@ button:disabled {
   background: #d1d5db;
 }
 
-/* ✅ (추가) 카드별 포인트 컬러(링크 기반) */
+/* 카드별 포인트 컬러(링크 기반) */
 .guide-card[href*="winning-odds"]::before {
   background: #93c5fd;
 }
@@ -905,7 +1028,7 @@ button:disabled {
     background-color: #e6cf00;
   }
 
-  /* ✅ (추가) 상단 안내 배너 hover (PC 전용) */
+  /* 상단 안내 배너 hover (PC 전용) */
   .notice-bar {
     cursor: pointer;
   }
@@ -981,11 +1104,11 @@ footer {
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
 
-  /* ✅ 전역 링크 스타일(회색/밑줄/모바일 눌림) 덮어쓰기용 */
+  /* 전역 링크 스타일(회색/밑줄/모바일 눌림) 덮어쓰기용 */
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ✅ CTA 링크 상태 고정 (전역 .container p a 규칙 덮어쓰기) */
+/* CTA 링크 상태 고정 (전역 .container p a 규칙 덮어쓰기) */
 .mobile-guide-page .mg-cta-link:link,
 .mobile-guide-page .mg-cta-link:visited,
 .mobile-guide-page .mg-cta-link:hover,
@@ -1063,13 +1186,13 @@ footer {
 @media (hover: hover) and (pointer: fine) {
   .mobile-guide-page .mg-cta-link:hover {
     color: #111; /* hover에서도 같은 검정 유지 */
-    text-decoration: underline; /* ✅ 웹에서만 밑줄 */
+    text-decoration: underline; /* 웹에서만 밑줄 */
     text-underline-offset: 3px; /* 살짝 띄워서 고급스럽게 */
-    background: #e5e7eb; /* ✅ 기본(#f3f4f6)보다 한 톤 진하게 */
+    background: #e5e7eb; /* 기본(#f3f4f6)보다 한 톤 진하게 */
   }
 }
 
-/* ✅ index 전용 상단 패딩 축소 */
+/* index 전용 상단 패딩 축소 */
 .home-page {
   padding-top: 12px;
 }

@@ -5,6 +5,9 @@ const resultDiv = document.getElementById("result");
 const historyList = document.getElementById("history-list");
 const dingSound = document.getElementById("dingSound"); // 효과음 소스
 
+// ✅ 번호 실시간 분석 라인(추가)
+const analysisLineEl = document.getElementById("analysis-line");
+
 let intervalId = null; // 번호가 순차적으로 나오는 타이머
 let timeoutId = null; // 마지막 정렬 애니메이션용 타이머
 let currentNumbers = []; // 현재 생성된 번호들
@@ -54,6 +57,32 @@ let myLocationMarker = null; // 내 위치 마커(허용 시)
 let mapInfoWindow = null; // 인포윈도우(마커 클릭 시 장소명)
 let mapKakaoAvailable = true; // 카카오 SDK 사용 가능 여부
 
+// ✅ 1-1. 분석 기준(최종 기획안)
+const SUM_MIN = 121;
+const SUM_MAX = 160;
+
+// 저/고 기준: 1~22(저), 23~45(고)
+const LOW_MAX = 22;
+
+/// 허용 비율: 3:3 / 2:4 / 4:2
+function _isAllowedRatio(aCount) {
+  return aCount === 2 || aCount === 3 || aCount === 4;
+}
+
+// ✅ 분석 라인 Fade-in 재생(수정)
+// 라벨은 유지, 등급/숫자만 애니메이션
+function playAnalysisFadeIn() {
+  if (!analysisLineEl) return;
+
+  const targets = analysisLineEl.querySelectorAll(".analysis-anim");
+
+  targets.forEach((el) => el.classList.remove("fade-in-item"));
+
+  requestAnimationFrame(() => {
+    targets.forEach((el) => el.classList.add("fade-in-item"));
+  });
+}
+
 // 2. 초기화 및 화면 업데이트 함수
 
 // 현재 회차와 추첨 날짜를 계산하고 화면(HTML)에 표시하는 함수
@@ -93,12 +122,128 @@ function initPlaceholders() {
     ball.classList.add("ball", "placeholder");
     resultDiv.appendChild(ball);
   }
+
+  // ✅ 분석 라인 초기화(추가)
+  clearAnalysisLine();
+}
+
+function clearAnalysisLine() {
+  if (!analysisLineEl) return;
+
+  // ✅ 라벨은 항상 보이게 유지
+  // ✅ 등급/숫자는 자리만 유지하고 숨김 (analysis-anim 추가)
+  analysisLineEl.innerHTML =
+    `<span class="grade-fixed">` +
+    `<span class="analysis-anim" style="visibility:hidden;">✨ Best</span>` +
+    `</span>` +
+    `<span class="metric-label">홀짝</span>&nbsp;<span class="analysis-anim val-fixed-oe" style="visibility:hidden;">0:0</span>` +
+    `&nbsp;<span class="sep">/</span>&nbsp;<span class="metric-label">저고</span>&nbsp;<span class="analysis-anim val-fixed-lh" style="visibility:hidden;">0:0</span>` +
+    `&nbsp;<span class="sep">/</span>&nbsp;<span class="metric-label">합계</span>&nbsp;<span class="analysis-anim val-fixed-sum" style="visibility:hidden;">000</span>`;
+}
+
+// ✅ 번호 조합 분석(추가)
+function analyzeNumbers(numbers) {
+  const nums = Array.isArray(numbers) ? numbers : [];
+  const sum = nums.reduce((acc, n) => acc + (typeof n === "number" ? n : 0), 0);
+
+  const oddCount = nums.filter((n) => n % 2 === 1).length;
+  const evenCount = 6 - oddCount;
+
+  const lowCount = nums.filter((n) => n <= LOW_MAX).length;
+  const highCount = 6 - lowCount;
+
+  const sumOk = sum >= SUM_MIN && sum <= SUM_MAX;
+  const oddEvenOk = oddCount === 3; // Best 기준은 3:3
+  const lowHighOk = lowCount === 3; // Best 기준은 3:3
+
+  // Best: 홀짝 3:3 AND 저고 3:3 AND 합계 121~160
+  const isBest = oddEvenOk && lowHighOk && sumOk;
+
+  // Good: (3:3/2:4/4:2) AND (3:3/2:4/4:2) AND 합계 121~160 (Best 제외)
+  const isGood =
+    !isBest && _isAllowedRatio(oddCount) && _isAllowedRatio(lowCount) && sumOk;
+
+  let grade = "Soso";
+  if (isBest) grade = "Best";
+  else if (isGood) grade = "Good";
+
+  return {
+    grade,
+    oddCount,
+    evenCount,
+    lowCount,
+    highCount,
+    sum,
+  };
+}
+
+// ✅ 분석 라인 렌더(추가) - 항상 4항목(등급/홀짝/저고/합계)
+function renderAnalysisLine(numbers) {
+  if (!analysisLineEl) return;
+
+  const a = analyzeNumbers(numbers);
+
+  // ✅ 등급 스타일 규칙(최종): Best=초록+볼드 / Good=검정+볼드 / Soso=검정(일반)
+  let gradeText = "😐 Soso";
+  let gradeClass = "grade-soso"; // (CSS에서) 검정 + 일반
+  if (a.grade === "Best") {
+    gradeText = "✨ Best";
+    gradeClass = "grade-best"; // (CSS에서) 초록 + 볼드
+  } else if (a.grade === "Good") {
+    gradeText = "👍 Good";
+    gradeClass = "grade-good"; // (CSS에서) 검정 + 볼드
+  }
+
+  const oddEvenValue = `${a.oddCount}:${a.evenCount}`;
+  const lowHighValue = `${a.lowCount}:${a.highCount}`;
+  const sumValue = `${a.sum}`;
+
+  // ✅ 수치 스타일 규칙(최종)
+  // Best: 수치 초록+볼드
+  // Good: 수치 검정+볼드
+  // Soso: 수치 검정(일반) + 황금 조건만 검정+볼드
+  let oddEvenValueClass = "num-soso";
+  let lowHighValueClass = "num-soso";
+  let sumValueClass = "num-soso";
+
+  if (a.grade === "Best") {
+    oddEvenValueClass = "num-best";
+    lowHighValueClass = "num-best";
+    sumValueClass = "num-best";
+  } else if (a.grade === "Good") {
+    oddEvenValueClass = "num-good";
+    lowHighValueClass = "num-good";
+    sumValueClass = "num-good";
+  } else {
+    // ✅ Soso: 황금 조건만 파랑+볼드(num-soso-hit), 나머지는 검정 일반(num-soso)
+    oddEvenValueClass = _isAllowedRatio(a.oddCount)
+      ? "num-soso-hit"
+      : "num-soso";
+    lowHighValueClass = _isAllowedRatio(a.lowCount)
+      ? "num-soso-hit"
+      : "num-soso";
+    sumValueClass =
+      a.sum >= SUM_MIN && a.sum <= SUM_MAX ? "num-soso-hit" : "num-soso";
+  }
+
+  // ✅ 라벨은 고정, 등급/숫자만 애니메이션 대상
+  analysisLineEl.innerHTML =
+    `<span class="grade-fixed">` +
+    `<span class="analysis-anim grade-label ${gradeClass}">${gradeText}</span>` +
+    `</span>` +
+    `<span class="metric-label">홀짝</span>&nbsp;<span class="analysis-anim val-fixed-oe ${oddEvenValueClass}">${oddEvenValue}</span>` +
+    `&nbsp;<span class="sep">/</span>&nbsp;<span class="metric-label">저고</span>&nbsp;<span class="analysis-anim val-fixed-lh ${lowHighValueClass}">${lowHighValue}</span>` +
+    `&nbsp;<span class="sep">/</span>&nbsp;<span class="metric-label">합계</span>&nbsp;<span class="analysis-anim val-fixed-sum ${sumValueClass}">${sumValue}</span>`;
+
+  // ✅ 마지막에만 애니메이션 실행
+  playAnalysisFadeIn();
 }
 
 // ★ 기능 1: 필터 버튼 생성 및 초기화
 function initFilterButtons() {
   const includeContainer = document.getElementById("include-numbers-container");
   const excludeContainer = document.getElementById("exclude-numbers-container");
+  if (!includeContainer || !excludeContainer) return;
 
   // 1~45 버튼 생성
   for (let i = 1; i <= 45; i++) {
@@ -117,8 +262,6 @@ function initFilterButtons() {
     exBtn.dataset.num = i;
     exBtn.onclick = () => toggleExclude(i, exBtn);
     excludeContainer.appendChild(exBtn);
-
-    // 9개 단위로 줄바꿈을 시각적으로 돕기 위해 (CSS flex-wrap이 처리하지만, DOM 순서 보장)
   }
 }
 
@@ -139,7 +282,8 @@ function toggleInclude(num, btn) {
     includeSet.add(num);
     btn.classList.add("included");
   }
-  document.getElementById("include-count").textContent = `${includeSet.size}/5`;
+  const el = document.getElementById("include-count");
+  if (el) el.textContent = `${includeSet.size}/5`;
 }
 
 // 제외 번호 토글 (최대 38개, 빨간색)
@@ -160,8 +304,8 @@ function toggleExclude(num, btn) {
     excludeSet.add(num);
     btn.classList.add("excluded");
   }
-  document.getElementById("exclude-count").textContent =
-    `${excludeSet.size}/38`;
+  const el = document.getElementById("exclude-count");
+  if (el) el.textContent = `${excludeSet.size}/38`;
 }
 
 // ★ 기능 2: 카카오맵 연동 (지도팝업 찐최종 기획안 반영 - 수정)
@@ -465,7 +609,10 @@ function initKakaoShare() {
     console.log("Kakao SDK init failed (Check API Key)");
   }
 
-  document.getElementById("kakao-share-btn").addEventListener("click", () => {
+  const shareBtn = document.getElementById("kakao-share-btn");
+  if (!shareBtn) return;
+
+  shareBtn.addEventListener("click", () => {
     if (currentNumbers.length !== 6) {
       alert("먼저 번호를 생성해주세요!");
       return;
@@ -530,7 +677,7 @@ function renderHistoryItem(item) {
   historyItem.prepend(historyNumberPrefix);
 
   const numbersDiv = document.createElement("div");
-  historyDiv = document.createElement("div"); // 수정: 변수명 오류 방지용 (혹시 모를 오류 대비)
+  const historyDiv = document.createElement("div"); // 수정: 변수명 오류 방지용 (혹시 모를 오류 대비)
   numbersDiv.classList.add("history-numbers");
 
   item.numbers.forEach((number) => {
@@ -779,6 +926,10 @@ function completeGeneration(finalNumbers) {
   if (!isGenerating) return;
   clearAllRollingAnimations();
   displayAllBalls(finalNumbers); // 최종 번호로 공 색칠
+
+  // ✅ 최종 번호 기준 분석 라인 출력(추가)
+  renderAnalysisLine(finalNumbers);
+
   addHistory(finalNumbers); // 기록실로 슝!
   _resetButtonsAndState();
 }
@@ -847,7 +998,7 @@ function addHistory(numbers) {
   historyItem.prepend(historyNumberPrefix);
 
   const numbersDiv = document.createElement("div");
-  historyDiv = document.createElement("div"); // 수정: 변수명 오류 방지용 (혹시 모를 오류 대비)
+  const historyDiv = document.createElement("div"); // 수정: 변수명 오류 방지용 (혹시 모를 오류 대비)
   numbersDiv.classList.add("history-numbers");
 
   numbers.forEach((number) => {
@@ -917,7 +1068,7 @@ function addHistory(numbers) {
 
   // 추가된 부분: 기록이 추가될 때마다 기록 상자의 스크롤을 맨 위로 이동 (최신 기록 확인용)
   const container = document.getElementById("history-container");
-  container.scrollTop = 0;
+  if (container) container.scrollTop = 0;
 }
 
 // 로또 공식 번호 대역별 색상 적용
