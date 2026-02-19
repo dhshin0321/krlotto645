@@ -184,7 +184,7 @@ function renderAnalysisLine(numbers) {
   const a = analyzeNumbers(numbers);
 
   // ✅ 등급 스타일 규칙(최종): Best=초록+볼드 / Good=검정+볼드 / Soso=검정(일반)
-  let gradeText = "😐 Soso";
+  let gradeText = "🙂 Soso";
   let gradeClass = "grade-soso"; // (CSS에서) 검정 + 일반
   if (a.grade === "Best") {
     gradeText = "✨ Best";

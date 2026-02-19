@@ -267,7 +267,7 @@ button:disabled {
 /* ✅ Soso 등급 텍스트 (검정 일반) */
 .analysis-line .grade-soso {
   color: #111;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 /* ✅ Best 수치 (초록 볼드) */
