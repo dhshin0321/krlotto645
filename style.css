@@ -380,7 +380,7 @@ button:disabled {
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   width: 300px;
   flex-shrink: 0;
 }
@@ -601,7 +601,7 @@ button:disabled {
 .filter-wrapper {
   margin-top: 20px;
   border-top: 1px solid #eee;
-  padding-top: 20px;
+  padding-top: 16px;
   text-align: left;
 }
 .filter-wrapper h3 {
@@ -698,7 +698,7 @@ button:disabled {
   width: 100%;
   max-width: 790px;
   box-sizing: border-box;
-  margin-top: 20px;
+  margin-top: 16px;
   color: #555;
   margin-bottom: 50px;
 }
@@ -922,6 +922,7 @@ button:disabled {
   .wrapper {
     flex-direction: column;
     align-items: center;
+    gap: 16px;
     width: 100%;
   }
 
@@ -1196,20 +1197,20 @@ footer {
   justify-content: center;
 }
 
-/* ✅ 모바일에서만 모바일 광고 노출 + 광고1 아래 간격 20px */
+/* ✅ 모바일에서만 모바일 광고 노출 + 광고1 아래 간격 16px */
 @media (max-width: 768px) {
   .adfit-mobile {
     display: flex;
   }
 
-  /* ✅ 모바일에서 광고1 ↔ 번호 필터 위 글씨 간격 20px */
+  /* ✅ 모바일에서 광고1 ↔ 번호 필터 위 글씨 간격 16px */
   #mobile_main_top_320x100 {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
-  /* ✅ 모바일에서 지도 ↔ 광고3 간격 20px */
+  /* ✅ 모바일에서 지도 ↔ 광고3 간격 16px */
   #mobile_info_top_300x250 {
-    margin-top: 20px;
+    margin-top: 16px;
   }
 }
 
@@ -1219,7 +1220,12 @@ footer {
   }
 }
 
-/* ✅ 웹에서 메인화면 아래 광고(728x90) 위 간격 20px */
+/* ✅ 웹에서 메인화면 아래 광고(728x90) 위 간격 16px */
 .wrapper + .adfit {
-  margin-top: 20px;
+  margin-top: 16px;
+}
+
+/* ✅ mobile-guide 광고 공통 여백 (웹/모바일 동일 16px) */
+.mobile-guide-page .guide-ad {
+  margin: 16px 0;
 }
