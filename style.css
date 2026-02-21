@@ -620,10 +620,10 @@ button:disabled {
 }
 
 /* 포함/제외 섹션 전체 배경(A안) */
-.filter-section:first-of-type {
+.filter-section.filter-include {
   background: #f0f7ff;
 }
-.filter-section:last-of-type {
+.filter-section.filter-exclude {
   background: #fff5f5;
 }
 
@@ -1196,14 +1196,18 @@ footer {
   justify-content: center;
 }
 
+/* ✅ 모바일에서만 모바일 광고 노출 + 광고1 아래 간격 20px */
 @media (max-width: 768px) {
   .adfit-mobile {
     display: flex;
   }
-}
 
-/* ✅ 모바일에서 지도 ↔ 광고3 간격 20px */
-@media (max-width: 768px) {
+  /* ✅ 모바일에서 광고1 ↔ 번호 필터 위 글씨 간격 20px */
+  #mobile_main_top_320x100 {
+    margin-bottom: 20px;
+  }
+
+  /* ✅ 모바일에서 지도 ↔ 광고3 간격 20px */
   #mobile_info_top_300x250 {
     margin-top: 20px;
   }
