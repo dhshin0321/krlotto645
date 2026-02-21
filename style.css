@@ -698,7 +698,7 @@ button:disabled {
   width: 100%;
   max-width: 790px;
   box-sizing: border-box;
-  margin-top: 40px;
+  margin-top: 20px;
   color: #555;
   margin-bottom: 50px;
 }
@@ -1188,4 +1188,34 @@ footer {
 /* index 전용 상단 패딩 축소 */
 .home-page {
   padding-top: 12px;
+}
+
+/* ✅ AdFit (모바일만 노출) */
+.adfit {
+  display: none;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .adfit-mobile {
+    display: flex;
+  }
+}
+
+/* ✅ 모바일에서 지도 ↔ 광고3 간격 20px */
+@media (max-width: 768px) {
+  #mobile_info_top_300x250 {
+    margin-top: 20px;
+  }
+}
+
+@media (min-width: 769px) {
+  .adfit-desktop {
+    display: flex;
+  }
+}
+
+/* ✅ 웹에서 메인화면 아래 광고(728x90) 위 간격 20px */
+.wrapper + .adfit {
+  margin-top: 20px;
 }
